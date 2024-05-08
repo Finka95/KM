@@ -1,6 +1,6 @@
 ﻿namespace Tinder.DAL.Entities;
-
-internal class ChatEntity : BaseEntity
+public class ChatEntity : BaseEntity
 {
-    public List<MessageEntity> Messages { get; set; }
+    public List<MessageEntity> Messages { get; set; } 
+    public List<Guid> UserIds { get; set; }  
 }

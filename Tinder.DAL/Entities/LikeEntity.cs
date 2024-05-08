@@ -2,6 +2,6 @@
 
 public class LikeEntity : BaseEntity
 {
-    public Guid LikeSenderId { get; set; }
-    public Guid LikeReceiverId { get; set; }
+    public Guid SenderId { get; set; }
+    public Guid ReceiverId { get; set; }
 }

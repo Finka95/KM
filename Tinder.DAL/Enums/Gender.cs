@@ -1,6 +1,6 @@
 ﻿namespace Tinder.DAL.Enums;
 
-public enum Sex
+public enum Gender
 {
     Man,
     Woman
