@@ -11,5 +11,6 @@ public class UserEntity : BaseEntity
     public string Description { get; set; }
     public Gender Gender { get; set; }
 
-    public List<Guid> Chats { get; set; }
+    public List<Guid> ChatIds { get; set; }
+    public List<Guid> PhotoIds { get; set; }
 }
