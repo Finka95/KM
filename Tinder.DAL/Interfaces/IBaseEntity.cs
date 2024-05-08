@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Tinder.DAL.Interfaces;
 
-namespace Tinder.DAL.Interfaces
+public interface IBaseEntity
 {
-    internal class IBaseEntity
-    {
-    }
+    public Guid Id { get; set; }
 }

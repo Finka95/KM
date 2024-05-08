@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Tinder.DAL.Entities;
 
-namespace Tinder.DAL.Entities
+public class LikeEntity : BaseEntity
 {
-    internal class Like
-    {
-    }
+    public Guid LikeSenderId { get; set; }
+    public Guid LikeReceiverId { get; set; }
 }

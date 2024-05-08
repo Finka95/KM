@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Tinder.DAL.Enums;
 
-namespace Tinder.DAL.Enums
+public enum Sex
 {
-    internal class Enum
-    {
-    }
+    Man,
+    Woman
 }
