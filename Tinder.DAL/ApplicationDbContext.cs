@@ -5,17 +5,13 @@ using Tinder.DAL.Entities;
 namespace Tinder.DAL;
 public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : 
+        base(options)
     {
-            
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        /*modelBuilder.Entity<UserEntity>()
-            .HasMany(u => u.ReceivedLikes)
-            .WithMany(l => l.ReceiverUser);*/
-
         modelBuilder.Entity<LikeEntity>()
             .HasOne(l => l.SenderUser)
             .WithMany(u => u.SentLikes)
