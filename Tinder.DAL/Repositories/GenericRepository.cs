@@ -13,7 +13,6 @@ namespace Tinder.DAL.Repositories
         }
         public virtual async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken)
         {
-           entity.Id = Guid.NewGuid();
            await _context.AddAsync(entity, cancellationToken);
            await _context.SaveChangesAsync(cancellationToken);
            return entity;
