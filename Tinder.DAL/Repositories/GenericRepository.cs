@@ -7,43 +7,42 @@ namespace Tinder.DAL.Repositories
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         protected ApplicationDbContext _context;
+        protected DbSet<TEntity> _dbSet; 
         public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
+            _dbSet = _context.Set<TEntity>();
         }
         public virtual async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken)
         {
-           await _context.Set<TEntity>().AddAsync(entity, cancellationToken);
+           await _dbSet.AddAsync(entity, cancellationToken);
            await _context.SaveChangesAsync(cancellationToken);
            return entity;
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+        public virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
-            var entities = await _context.Set<TEntity>()
+            return _dbSet
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
-            return entities;
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public virtual Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var entity = await _context.Set<TEntity>()
-                .FindAsync(id, cancellationToken);
-            return entity;
-        }
+            return _dbSet.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        } 
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
         {
-            _context.Set<TEntity>().Entry(entity).State = EntityState.Modified;
+            _dbSet.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync(cancellationToken);
             return entity;
         }
         public virtual async Task<TEntity> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var entity = await _context.Set<TEntity>()
+            var entity = await _dbSet
                 .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-            _context.Set<TEntity>().Remove(entity);
+            _dbSet.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return entity;
         }
