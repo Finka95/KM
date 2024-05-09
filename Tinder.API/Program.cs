@@ -1,4 +1,4 @@
-using Tinder.DAL.DI;
+using Tinder.BLL.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.RegisterDataAccessDependencies(builder.Configuration);
+builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 
 var app = builder.Build();
 
