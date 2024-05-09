@@ -8,11 +8,13 @@ namespace Tinder.DAL.Repositories
     {
         protected ApplicationDbContext _context;
         protected DbSet<TEntity> _dbSet; 
+
         public GenericRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
         }
+
         public virtual async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken)
         {
            await _dbSet.AddAsync(entity, cancellationToken);
