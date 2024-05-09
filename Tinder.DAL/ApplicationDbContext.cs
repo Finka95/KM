@@ -8,7 +8,10 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : 
         base(options)
     {
-        Database.Migrate();
+        if (Database.IsRelational())
+        {
+            Database.Migrate();
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
