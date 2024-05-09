@@ -2,7 +2,7 @@
 
 namespace Tinder.BLL.Models
 {
-    public class UserModel
+    public class User
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
@@ -12,10 +12,10 @@ namespace Tinder.BLL.Models
         public string Description { get; set; }
         public Gender Gender { get; set; }
 
-        public ICollection<ChatModel> Chats { get; set; }
-        public ICollection<PhotoModel> Photos { get; set; }
-        public ICollection<LikeModel> ReceivedLikes { get; set; }
-        public ICollection<LikeModel> SentLikes { get; set; }
-        public ICollection<MessageModel> Messages { get; set; }
+        public ICollection<Chat> Chats { get; set; }
+        public ICollection<Photo> Photos { get; set; }
+        public ICollection<Like> ReceivedLikes { get; set; }
+        public ICollection<Like> SentLikes { get; set; }
+        public ICollection<Message> Messages { get; set; }
     }
 }

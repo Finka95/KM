@@ -1,4 +1,4 @@
-﻿namespace Tinder.API.Models
+﻿namespace Tinder.BLL.Models
 {
     public class Chat
     {

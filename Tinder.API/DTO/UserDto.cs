@@ -2,7 +2,7 @@
 
 namespace Tinder.API.Models
 {
-    public class User
+    public class UserDto
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
@@ -12,10 +12,10 @@ namespace Tinder.API.Models
         public string Description { get; set; }
         public Gender Gender { get; set; }
 
-        public ICollection<Chat> Chats { get; set; }
-        public ICollection<Photo> Photos { get; set; }
-        public ICollection<Like> ReceivedLikes { get; set; }
-        public ICollection<Like> SentLikes { get; set; }
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<ChatDTO> Chats { get; set; }
+        public ICollection<PhotoDto> Photos { get; set; }
+        public ICollection<LikeDTO> ReceivedLikes { get; set; }
+        public ICollection<LikeDTO> SentLikes { get; set; }
+        public ICollection<MessageDto> Messages { get; set; }
     }
 }
