@@ -4,16 +4,17 @@ namespace Tinder.API.Extension
 {
     public static class Serilog
     {
-        public static IServiceCollection Add(
-            this IServiceCollection services,
-            LoggerConfiguration configuration)
-        {
-            Log.Logger = configuration.CreateLogger();
-
-            services.AddLogging(loggingBuilder =>
-                loggingBuilder.AddSerilog(dispose: true));
-
-            return services;
-        }
+       public static IHostBuilder AddSerilogConfiguration(this IHostBuilder builder)
+       {
+           return builder.ConfigureServices((hostingContext, services) => {
+              Log.Logger = new LoggerConfiguration()
+                  .MinimumLevel.Information()
+                  .WriteTo.Console()
+                  .WriteTo.File("logs/logs.txt", rollingInterval:RollingInterval.Day)
+                  .CreateLogger();
+              
+               services.AddSerilog();
+           });
+       }
     }
 }

@@ -1,4 +1,3 @@
-using Serilog;
 using Tinder.API.Extension;
 using Tinder.BLL.DI;
 
@@ -6,9 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Host.AddSerilogConfiguration();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.Add(new LoggerConfiguration());
 builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 
 var app = builder.Build();
