@@ -1,4 +1,5 @@
 using Tinder.API.Extension;
+using Tinder.API.Middleware;
 using Tinder.BLL.DI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 
 var app = builder.Build();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
