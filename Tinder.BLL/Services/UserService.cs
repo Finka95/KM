@@ -9,7 +9,7 @@ namespace Tinder.BLL.Services
     public class UserService : GenericService<User, UserEntity>, IUserService
     {
 
-        public UserService(IUserRepository repository, IMapper mapper, ILikeRepository likeRepository)
+        public UserService(IUserRepository repository, IMapper mapper)
             : base(repository, mapper)
         {
            
