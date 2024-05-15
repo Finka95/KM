@@ -9,6 +9,10 @@ namespace Tinder.BLL.Mapper
         public MappingProfile()
         {
             CreateMap<UserEntity, User>().ReverseMap();
+            CreateMap<ChatEntity, Chat>().ReverseMap();
+            CreateMap<MessageEntity, Message>().ReverseMap();
+            CreateMap<PhotoEntity, Photo>().ReverseMap();
+            CreateMap<LikeEntity, Like>().ReverseMap();
         }
     }
 }

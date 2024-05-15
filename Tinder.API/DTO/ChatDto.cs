@@ -1,6 +1,6 @@
 ﻿namespace Tinder.API.Models
 {
-    public class ChatDTO
+    public class ChatDto
     {
         public Guid Id { get; set; }
         public ICollection<MessageDto> Messages { get; set; }

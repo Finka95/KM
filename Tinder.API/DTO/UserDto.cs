@@ -12,10 +12,10 @@ namespace Tinder.API.Models
         public string Description { get; set; }
         public Gender Gender { get; set; }
 
-        public ICollection<ChatDTO> Chats { get; set; }
+        public ICollection<ChatDto> Chats { get; set; }
         public ICollection<PhotoDto> Photos { get; set; }
-        public ICollection<LikeDTO> ReceivedLikes { get; set; }
-        public ICollection<LikeDTO> SentLikes { get; set; }
+        public ICollection<LikeDto> ReceivedLikes { get; set; }
+        public ICollection<LikeDto> SentLikes { get; set; }
         public ICollection<MessageDto> Messages { get; set; }
     }
 }

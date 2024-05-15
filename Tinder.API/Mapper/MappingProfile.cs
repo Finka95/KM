@@ -9,8 +9,12 @@ namespace Tinder.API.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<User, CreateUserDto>().ReverseMap();
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<CreateUserDto, User>().ReverseMap();
+            CreateMap<User, UserDto>();
+            CreateMap<Photo, PhotoDto>();
+            CreateMap<Message, MessageDto>();
+            CreateMap<Like, LikeDto>();
+            CreateMap<Chat, ChatDto>();
         }
     }
 }

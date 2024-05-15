@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Tinder.API.Extension;
 using Tinder.API.Mapper;
 using Tinder.API.Middleware;
@@ -6,7 +7,8 @@ using Tinder.BLL.DI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Host.AddSerilogConfiguration();
 builder.Services.AddEndpointsApiExplorer();

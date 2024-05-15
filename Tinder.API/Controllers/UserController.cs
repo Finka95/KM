@@ -37,12 +37,10 @@ namespace Tinder.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<UserDto> UpdateById(Guid id, CreateUserDto dto, CancellationToken cancellationToken)
+        public async Task<CreateUserDto> UpdateById(Guid id, CreateUserDto dto, CancellationToken cancellationToken)
         {
-            var newUser = _mapper.Map<User>(dto);
-            newUser.Id = id;
-            var user = await _userService.UpdateModelAsync(newUser, cancellationToken);
-            return _mapper.Map<UserDto>(user);
+            var user = await _userService.UpdateUserByIdAsync(id,_mapper.Map<User>(dto), cancellationToken);
+            return _mapper.Map<CreateUserDto>(user);
         }
 
         [HttpPost]

@@ -31,7 +31,7 @@ namespace Tinder.DAL.Repositories
 
         public virtual Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return _dbSet.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            return _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         } 
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
