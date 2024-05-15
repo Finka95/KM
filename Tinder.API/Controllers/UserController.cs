@@ -23,7 +23,6 @@ namespace Tinder.API.Controllers
         public async Task<UserDto> GetById(Guid id, CancellationToken cancellationToken)
         {
             var model = await _userService.GetModelByIdAsync(id, cancellationToken);
-
             return _mapper.Map<UserDto>(model);
         }
 
@@ -32,7 +31,6 @@ namespace Tinder.API.Controllers
         public async Task<List<UserDto>> GetAll(CancellationToken cancellationToken)
         {
             var userModels = await _userService.GetAllAsync(cancellationToken);
-
             return _mapper.Map<List<UserDto>>(userModels.ToList());
         }
 
