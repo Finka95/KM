@@ -53,7 +53,7 @@ namespace Tinder.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public virtual async Task<UserDto> DeleteById(Guid id, CancellationToken cancellationToken)
+        public async Task<UserDto> DeleteById(Guid id, CancellationToken cancellationToken)
         {
             var model = await _userService.DeleteModelAsync(id, cancellationToken);
             return _mapper.Map<UserDto>(model);
