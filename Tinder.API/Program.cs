@@ -1,13 +1,16 @@
 using Tinder.API.Extension;
+using Tinder.API.Mapper;
 using Tinder.API.Middleware;
 using Tinder.BLL.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Host.AddSerilogConfiguration();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddSwaggerGen();
 builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 
@@ -42,6 +45,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+app.MapControllers();
 app.Run();
 
 internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)

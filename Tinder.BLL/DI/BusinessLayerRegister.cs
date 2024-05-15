@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tinder.BLL.Interfaces;
+using Tinder.BLL.Mapper;
+using Tinder.BLL.Services;
 using Tinder.DAL.DI;
 
 namespace Tinder.BLL.DI
@@ -9,6 +12,9 @@ namespace Tinder.BLL.DI
         public static void RegisterBusinessLogicDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.RegisterDataAccessDependencies(configuration);
+
+            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
