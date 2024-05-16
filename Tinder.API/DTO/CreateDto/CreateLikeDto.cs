@@ -1,6 +1,4 @@
-﻿using Tinder.API.Models;
-
-namespace Tinder.API.DTO.CreateDto
+﻿namespace Tinder.API.DTO.CreateDto
 {
     public class CreateLikeDto
     {

@@ -38,9 +38,8 @@ namespace Tinder.BLL.Services
 
             var likeEntity = new LikeEntity()
             {
-                //Id = model.Id,
-                //SenderUser = sender,
-                //ReceiverUser = receiver,
+                SenderUser = sender,
+                ReceiverUser = receiver,
                 SenderId = sender.Id,
                 ReceiverId = receiver.Id,
             };
