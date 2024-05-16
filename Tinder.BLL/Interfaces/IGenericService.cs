@@ -1,11 +1,11 @@
 ﻿namespace Tinder.BLL.Interfaces
 {
-    public interface IGenericService<T>
+    public interface IGenericService<TModel>
     {
-        Task<T> CreateModelAsync(T model, CancellationToken cancellationToken);
-        Task<T> GetModelByIdAsync(Guid id, CancellationToken cancellationToken);
-        Task<List<T>> GetAllAsync(CancellationToken cancellationToken);
-        Task<T> UpdateModelAsync(Guid id, T model, CancellationToken cancellationToken);
-        Task<T> DeleteModelAsync(Guid id, CancellationToken cancellationToken);
+        Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken);
+        Task<TModel> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<List<TModel>> GetAllAsync(CancellationToken cancellationToken);
+        Task<TModel> UpdateAsync(Guid id, TModel model, CancellationToken cancellationToken);
+        Task<TModel> DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

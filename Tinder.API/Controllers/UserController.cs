@@ -23,7 +23,7 @@ namespace Tinder.API.Controllers
         [HttpGet("{id}")]
         public async Task<UserDto> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var model = await _userService.GetModelByIdAsync(id, cancellationToken);
+            var model = await _userService.GetByIdAsync(id, cancellationToken);
             return _mapper.Map<UserDto>(model);
         }
 
@@ -38,21 +38,23 @@ namespace Tinder.API.Controllers
         [HttpPut("{id}")]
         public async Task<UserDto> UpdateById(Guid id, UpdateUserDto dto, CancellationToken cancellationToken)
         {
-            var user = await _userService.UpdateModelAsync(id,_mapper.Map<User>(dto), cancellationToken);
+            var userToUpdate = _mapper.Map<User>(dto);
+            var user = await _userService.UpdateAsync(id, userToUpdate, cancellationToken);
             return _mapper.Map<UserDto>(user);
         }
 
         [HttpPost]
         public async Task<UserDto> Create(CreateUserDto dto, CancellationToken cancellationToken)
         {
-            var model = await _userService.CreateModelAsync(_mapper.Map<User>(dto), cancellationToken);
+            var userToCreate = _mapper.Map<User>(dto);
+            var model = await _userService.CreateAsync(userToCreate, cancellationToken);
             return _mapper.Map<UserDto>(model);
         }
 
         [HttpDelete("{id}")]
         public async Task<UserDto> DeleteById(Guid id, CancellationToken cancellationToken)
         {
-            var model = await _userService.DeleteModelAsync(id, cancellationToken);
+            var model = await _userService.DeleteAsync(id, cancellationToken);
             return _mapper.Map<UserDto>(model);
         }
     }

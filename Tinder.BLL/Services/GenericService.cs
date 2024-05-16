@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Tinder.BLL.Interfaces;
-using Tinder.BLL.Models;
-using Tinder.DAL.Entities;
 using Tinder.DAL.Interfaces;
 
 namespace Tinder.BLL.Services
@@ -17,13 +15,14 @@ namespace Tinder.BLL.Services
             _mapper = mapper;
         }
 
-        public virtual async Task<TModel> CreateModelAsync(TModel model, CancellationToken cancellationToken)
+        public virtual async Task<TModel> CreateAsync(TModel model, CancellationToken cancellationToken)
         {
-            var entity = await _repository.CreateAsync(_mapper.Map<TEntity>(model), cancellationToken);
+            var modelToCreate = _mapper.Map<TEntity>(model);
+            var entity = await _repository.CreateAsync(modelToCreate, cancellationToken);
             return _mapper.Map<TModel>(entity);
         }
 
-        public virtual async Task<TModel> DeleteModelAsync(Guid id, CancellationToken cancellationToken)
+        public virtual async Task<TModel> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var entity = await _repository.DeleteByIdAsync(id, cancellationToken);
             return _mapper.Map<TModel>(entity);
@@ -35,13 +34,13 @@ namespace Tinder.BLL.Services
             return _mapper.Map<List<TModel>>(entities);
         }
 
-        public virtual async Task<TModel> GetModelByIdAsync(Guid id, CancellationToken cancellationToken)
+        public virtual async Task<TModel> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetByIdAsync(id, cancellationToken);
             return _mapper.Map<TModel>(entity);
         }
 
-        public virtual async Task<TModel> UpdateModelAsync(Guid id, TModel model, CancellationToken cancellationToken)
+        public virtual async Task<TModel> UpdateAsync(Guid id, TModel model, CancellationToken cancellationToken)
         {
             var newEntity = _mapper.Map<TEntity>(model);
             newEntity.Id = id;
