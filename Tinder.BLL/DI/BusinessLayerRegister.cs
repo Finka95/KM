@@ -15,6 +15,7 @@ namespace Tinder.BLL.DI
 
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ILikeService, LikeService>();
         }
     }
 }
