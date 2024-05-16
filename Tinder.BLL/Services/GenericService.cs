@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Tinder.BLL.Interfaces;
+using Tinder.BLL.Models;
+using Tinder.DAL.Entities;
 using Tinder.DAL.Interfaces;
 
 namespace Tinder.BLL.Services
@@ -39,10 +41,12 @@ namespace Tinder.BLL.Services
             return _mapper.Map<TModel>(entity);
         }
 
-        public virtual async Task<TModel> UpdateModelAsync(TModel model, CancellationToken cancellationToken)
+        public virtual async Task<TModel> UpdateModelAsync(Guid id, TModel model, CancellationToken cancellationToken)
         {
-            var entity = await _repository.UpdateAsync(_mapper.Map<TEntity>(model), cancellationToken);
-            return _mapper.Map<TModel>(entity);
+            var newEntity = _mapper.Map<TEntity>(model);
+            newEntity.Id = id;
+            await _repository.UpdateAsync(newEntity, cancellationToken);
+            return _mapper.Map<TModel>(newEntity);
         }
     }
 }

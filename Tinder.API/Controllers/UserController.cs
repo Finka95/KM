@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Tinder.API.DTO.CreateDto;
+using Tinder.API.DTO.UpdateDto;
 using Tinder.API.Models;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Models;
@@ -35,10 +36,10 @@ namespace Tinder.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<CreateUserDto> UpdateById(Guid id, CreateUserDto dto, CancellationToken cancellationToken)
+        public async Task<UserDto> UpdateById(Guid id, UpdateUserDto dto, CancellationToken cancellationToken)
         {
-            var user = await _userService.UpdateUserByIdAsync(id,_mapper.Map<User>(dto), cancellationToken);
-            return _mapper.Map<CreateUserDto>(user);
+            var user = await _userService.UpdateModelAsync(id,_mapper.Map<User>(dto), cancellationToken);
+            return _mapper.Map<UserDto>(user);
         }
 
         [HttpPost]

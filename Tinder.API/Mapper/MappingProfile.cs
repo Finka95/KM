@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Tinder.API.DTO.CreateDto;
+using Tinder.API.DTO.UpdateDto;
 using Tinder.API.Models;
 using Tinder.BLL.Models;
 
@@ -9,7 +10,8 @@ namespace Tinder.API.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<CreateUserDto, User>().ReverseMap();
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
             CreateMap<User, UserDto>();
             CreateMap<Photo, PhotoDto>();
             CreateMap<Message, MessageDto>();

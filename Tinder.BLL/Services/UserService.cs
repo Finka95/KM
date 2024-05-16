@@ -15,12 +15,5 @@ namespace Tinder.BLL.Services
            
         }
 
-        public async Task<User> UpdateUserByIdAsync(Guid id, User user, CancellationToken cancellationToken)
-        {
-            var newUser = _mapper.Map<UserEntity>(user);
-            newUser.Id = id;
-            var updatedUser = await _repository.UpdateAsync(newUser, cancellationToken);
-            return _mapper.Map<User>(updatedUser);
-        }
     }
 }
