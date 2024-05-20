@@ -1,4 +1,4 @@
-﻿namespace Tinder.API.Exceptions
+﻿namespace Tinder.Bll.Exceptions
 {
     public class BadRequestException : Exception
     {

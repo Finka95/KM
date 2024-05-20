@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Tinder.BLL.Exceptions;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Models;
 using Tinder.DAL.Entities;
@@ -19,18 +20,11 @@ namespace Tinder.BLL.Services
 
         public async Task<Photo> CreateAsync(Guid userId, Photo model, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-
-            if (model.IsAvatar && user.Photos.Any(p => p.IsAvatar))
+            var userEntity = await _userRepository.GetByIdAsync(userId, cancellationToken) ?? throw new NotFoundException("User is not found");
+            var user = _mapper.Map<User>(userEntity);
+            if (model.IsAvatar && userEntity.Photos.Any(p => p.IsAvatar))
             {
-                foreach (var userPhoto in user.Photos)
-                {
-                    if (userPhoto.IsAvatar)
-                        userPhoto.IsAvatar = false;
-                }
-
-                var photoEntities = _mapper.Map<List<PhotoEntity>>(user.Photos);
-                await _photoRepository.UpdateRangeAsync(photoEntities, cancellationToken);
+                await UpdateUserPhotosAsync(user, cancellationToken);
             }
 
             var photoEntity = _mapper.Map<PhotoEntity>(model);
@@ -41,24 +35,25 @@ namespace Tinder.BLL.Services
 
         public async Task<Photo> GetByIdAsync(Guid userId, Guid id, CancellationToken cancellationToken)
         {
-            var photoEntity = await _photoRepository.GetByIdAsync(id, userId, cancellationToken);
+            var photoEntity = await _photoRepository.GetByIdAsync(id, userId, cancellationToken) ?? throw new NotFoundException("    is not found");
             return _mapper.Map<Photo>(photoEntity);
         }
 
         public async Task<Photo> UpdateAsync(Guid userId, Guid id, Photo model, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
-            model.Id = id;
-            if (model.IsAvatar && user.Photos.Any(p => p.IsAvatar))
-            {
-                foreach (var userPhoto in user.Photos)
-                {
-                    if (userPhoto.IsAvatar)
-                        userPhoto.IsAvatar = false;
-                }
+            var userEntity = await _userRepository.GetByIdAsync(userId, cancellationToken) ?? throw new NotFoundException("User is not found");
+            var user = _mapper.Map<User>(userEntity);
 
-                var photoEntities = _mapper.Map<List<PhotoEntity>>(user.Photos);
-                await _photoRepository.UpdateRangeAsync(photoEntities, cancellationToken);
+            if (userEntity.Photos.All(p => p.Id != id))
+            {
+                throw new NotFoundException("Photo is not found");
+            }
+
+            model.Id = id;
+
+            if (model.IsAvatar && userEntity.Photos.Any(p => p.IsAvatar))
+            {
+                await UpdateUserPhotosAsync(user, cancellationToken);
             }
 
             var photoEntity = _mapper.Map<PhotoEntity>(model);
@@ -66,5 +61,25 @@ namespace Tinder.BLL.Services
             photo.UserId = userId;
             return _mapper.Map<Photo>(photo);
         }
+
+        public async Task<Photo> DeleteAsync(Guid userId, Guid id, CancellationToken cancellationToken)
+        {
+            var entity = await _photoRepository.GetByIdAsync(id, userId, cancellationToken) ?? throw new NotFoundException("Photo is not found");
+            await _photoRepository.DeleteAsync(entity, cancellationToken);
+            return _mapper.Map<Photo>(entity);
+        }
+
+        private Task<List<PhotoEntity>> UpdateUserPhotosAsync(User user, CancellationToken cancellationToken)
+        {
+            foreach (var userPhoto in user.Photos)
+            {
+                if (userPhoto.IsAvatar)
+                    userPhoto.IsAvatar = false;
+            }
+
+            var photoEntities = _mapper.Map<List<PhotoEntity>>(user.Photos);
+            return _photoRepository.UpdateRangeAsync(photoEntities, cancellationToken);
+        }
+
     }
 }

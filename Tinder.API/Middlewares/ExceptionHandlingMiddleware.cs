@@ -1,4 +1,5 @@
-﻿using Tinder.API.Exceptions;
+﻿using Tinder.Bll.Exceptions;
+using Tinder.BLL.Exceptions;
 
 namespace Tinder.API.Middleware
 {

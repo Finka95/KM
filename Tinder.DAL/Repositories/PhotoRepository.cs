@@ -18,9 +18,11 @@ namespace Tinder.DAL.Repositories
             return entity;
         }
 
-        public Task<PhotoEntity> GetByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+        public Task<PhotoEntity?> GetByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
         {
-            return _dbSet.AsNoTracking().Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
+            return _dbSet.AsNoTracking()
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId, cancellationToken);
         }
 
         public override Task<List<PhotoEntity>> GetAllAsync(CancellationToken cancellationToken)
@@ -33,9 +35,12 @@ namespace Tinder.DAL.Repositories
             foreach (var entity in photos)
             {
                 var entityFromDb = await _dbSet.FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
-                entityFromDb.PhotoURL = entity.PhotoURL;
-                entityFromDb.IsAvatar = entity.IsAvatar;
-                _dbSet.Attach(entityFromDb);
+                if (entityFromDb != null)
+                {
+                    entityFromDb.PhotoURL = entity.PhotoURL;
+                    entityFromDb.IsAvatar = entity.IsAvatar;
+                    _dbSet.Attach(entityFromDb);
+                }
             }
 
             await _context.SaveChangesAsync(cancellationToken);
@@ -50,6 +55,13 @@ namespace Tinder.DAL.Repositories
             _dbSet.Attach(entityFromDb);
             await _context.SaveChangesAsync(cancellationToken);
             return entity;
+        }
+
+        public async Task<PhotoEntity> DeleteAsync(PhotoEntity photo, CancellationToken cancellationToken)
+        {
+            _dbSet.Remove(photo);
+            await _context.SaveChangesAsync(cancellationToken);
+            return photo;
         }
     }
 }

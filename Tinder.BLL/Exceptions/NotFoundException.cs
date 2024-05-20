@@ -1,4 +1,4 @@
-﻿namespace Tinder.API.Exceptions
+﻿namespace Tinder.BLL.Exceptions
 {
     public class NotFoundException : Exception
     {
