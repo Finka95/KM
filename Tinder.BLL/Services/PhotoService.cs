@@ -24,7 +24,10 @@ namespace Tinder.BLL.Services
             var user = _mapper.Map<User>(userEntity);
             if (model.IsAvatar && userEntity.Photos.Any(p => p.IsAvatar))
             {
-                await UpdateUserPhotosAsync(user, cancellationToken);
+                var userPhoto = user.Photos.FirstOrDefault(p => p.IsAvatar);
+                userPhoto.IsAvatar = false;
+                var userPhotoEntity = _mapper.Map<PhotoEntity>(userPhoto);
+                await _photoRepository.UpdateAsync(userPhotoEntity, cancellationToken);
             }
 
             var photoEntity = _mapper.Map<PhotoEntity>(model);
@@ -46,16 +49,16 @@ namespace Tinder.BLL.Services
             return _mapper.Map<Photo>(entity);
         }
 
-        private Task<List<PhotoEntity>> UpdateUserPhotosAsync(User user, CancellationToken cancellationToken)
+        /*private Task<PhotoEntity> UpdateUserAvatarAsync(User user, CancellationToken cancellationToken)
         {
             var userPhoto = user.Photos.FirstOrDefault(p => p.IsAvatar);
-            if (userPhoto != null)
-            {
+           *//* if (userPhoto != null)
+            {*//*
                 userPhoto.IsAvatar = false;
-            }
-            var photoEntities = _mapper.Map<List<PhotoEntity>>(user.Photos);
-            return _photoRepository.UpdateRangeAsync(photoEntities, cancellationToken);
+            //}
+            var photoEntity = _mapper.Map<PhotoEntity>(userPhoto);
+            return _photoRepository.UpdateAsync(photoEntity, cancellationToken);
         }
-
+*/
     }
 }
