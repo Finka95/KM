@@ -11,6 +11,7 @@ namespace Tinder.BLL.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPhotoRepository _photoRepository;
+
         public PhotoService(IPhotoRepository repository, IMapper mapper, IUserRepository userRepository)
             : base(repository, mapper)
         {

@@ -14,6 +14,7 @@ namespace Tinder.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+
         public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;

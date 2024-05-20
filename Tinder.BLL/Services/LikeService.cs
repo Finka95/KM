@@ -10,6 +10,7 @@ namespace Tinder.BLL.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IChatRepository _chatRepository;
+
         public LikeService(ILikeRepository repository, IMapper mapper,
             IUserRepository userRepository, IChatRepository chatRepository)
             : base(repository, mapper)
