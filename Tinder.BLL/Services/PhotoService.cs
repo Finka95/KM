@@ -39,29 +39,6 @@ namespace Tinder.BLL.Services
             return _mapper.Map<Photo>(photoEntity);
         }
 
-        public async Task<Photo> UpdateAsync(Guid userId, Guid id, Photo model, CancellationToken cancellationToken)
-        {
-            var userEntity = await _userRepository.GetByIdAsync(userId, cancellationToken) ?? throw new NotFoundException("User is not found");
-            var user = _mapper.Map<User>(userEntity);
-
-            if (userEntity.Photos.All(p => p.Id != id))
-            {
-                throw new NotFoundException("Photo is not found");
-            }
-
-            model.Id = id;
-
-            if (model.IsAvatar && userEntity.Photos.Any(p => p.IsAvatar))
-            {
-                await UpdateUserPhotosAsync(user, cancellationToken);
-            }
-
-            var photoEntity = _mapper.Map<PhotoEntity>(model);
-            var photo = await _photoRepository.UpdateAsync(photoEntity, cancellationToken);
-            photo.UserId = userId;
-            return _mapper.Map<Photo>(photo);
-        }
-
         public async Task<Photo> DeleteAsync(Guid userId, Guid id, CancellationToken cancellationToken)
         {
             var entity = await _photoRepository.GetByIdAsync(id, userId, cancellationToken) ?? throw new NotFoundException("Photo is not found");
@@ -71,12 +48,11 @@ namespace Tinder.BLL.Services
 
         private Task<List<PhotoEntity>> UpdateUserPhotosAsync(User user, CancellationToken cancellationToken)
         {
-            foreach (var userPhoto in user.Photos)
+            var userPhoto = user.Photos.FirstOrDefault(p => p.IsAvatar);
+            if (userPhoto != null)
             {
-                if (userPhoto.IsAvatar)
-                    userPhoto.IsAvatar = false;
+                userPhoto.IsAvatar = false;
             }
-
             var photoEntities = _mapper.Map<List<PhotoEntity>>(user.Photos);
             return _photoRepository.UpdateRangeAsync(photoEntities, cancellationToken);
         }

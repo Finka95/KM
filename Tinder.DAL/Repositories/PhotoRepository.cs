@@ -6,6 +6,7 @@ namespace Tinder.DAL.Repositories
 {
     public class PhotoRepository : GenericRepository<PhotoEntity>, IPhotoRepository
     {
+
         public PhotoRepository(ApplicationDbContext context) : base(context)
         {
             
@@ -32,29 +33,21 @@ namespace Tinder.DAL.Repositories
 
         public async Task<List<PhotoEntity>> UpdateRangeAsync(List<PhotoEntity> photos, CancellationToken cancellationToken)
         {
+            var entityIds = photos.Select(e => e.Id).ToList();
+            var entitiesFromDb = await _dbSet.Where(e => entityIds.Contains(e.Id)).ToListAsync(cancellationToken);
+
             foreach (var entity in photos)
             {
-                var entityFromDb = await _dbSet.FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+                var entityFromDb = entitiesFromDb.Find(e => e.Id == entity.Id);
                 if (entityFromDb != null)
                 {
                     entityFromDb.PhotoURL = entity.PhotoURL;
                     entityFromDb.IsAvatar = entity.IsAvatar;
-                    _dbSet.Attach(entityFromDb);
                 }
             }
 
             await _context.SaveChangesAsync(cancellationToken);
             return photos;
-        }
-
-        public override async Task<PhotoEntity> UpdateAsync(PhotoEntity entity, CancellationToken cancellationToken)
-        {
-            var entityFromDb = await _dbSet.FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
-            entityFromDb.PhotoURL = entity.PhotoURL;
-            entityFromDb.IsAvatar = entity.IsAvatar;
-            _dbSet.Attach(entityFromDb);
-            await _context.SaveChangesAsync(cancellationToken);
-            return entity;
         }
 
         public async Task<PhotoEntity> DeleteAsync(PhotoEntity photo, CancellationToken cancellationToken)
