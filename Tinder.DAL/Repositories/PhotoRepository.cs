@@ -1,4 +1,5 @@
-﻿using Tinder.DAL.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Tinder.DAL.Entities;
 using Tinder.DAL.Interfaces;
 
 namespace Tinder.DAL.Repositories
@@ -8,6 +9,47 @@ namespace Tinder.DAL.Repositories
         public PhotoRepository(ApplicationDbContext context) : base(context)
         {
             
+        }
+
+        public override async Task<PhotoEntity> CreateAsync(PhotoEntity entity, CancellationToken cancellationToken)
+        {
+            await _dbSet.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
+        }
+
+        public Task<PhotoEntity> GetByIdAsync(Guid id, Guid userId, CancellationToken cancellationToken)
+        {
+            return _dbSet.AsNoTracking().Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public override Task<List<PhotoEntity>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return _dbSet.AsNoTracking().Include(p => p.User).ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<PhotoEntity>> UpdateRangeAsync(List<PhotoEntity> photos, CancellationToken cancellationToken)
+        {
+            foreach (var entity in photos)
+            {
+                var entityFromDb = await _dbSet.FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+                entityFromDb.PhotoURL = entity.PhotoURL;
+                entityFromDb.IsAvatar = entity.IsAvatar;
+                _dbSet.Attach(entityFromDb);
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return photos;
+        }
+
+        public override async Task<PhotoEntity> UpdateAsync(PhotoEntity entity, CancellationToken cancellationToken)
+        {
+            var entityFromDb = await _dbSet.FirstOrDefaultAsync(p => p.Id == entity.Id, cancellationToken);
+            entityFromDb.PhotoURL = entity.PhotoURL;
+            entityFromDb.IsAvatar = entity.IsAvatar;
+            _dbSet.Attach(entityFromDb);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
         }
     }
 }
