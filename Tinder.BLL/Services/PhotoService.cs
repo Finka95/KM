@@ -48,17 +48,5 @@ namespace Tinder.BLL.Services
             await _photoRepository.DeleteAsync(entity, cancellationToken);
             return _mapper.Map<Photo>(entity);
         }
-
-        /*private Task<PhotoEntity> UpdateUserAvatarAsync(User user, CancellationToken cancellationToken)
-        {
-            var userPhoto = user.Photos.FirstOrDefault(p => p.IsAvatar);
-           *//* if (userPhoto != null)
-            {*//*
-                userPhoto.IsAvatar = false;
-            //}
-            var photoEntity = _mapper.Map<PhotoEntity>(userPhoto);
-            return _photoRepository.UpdateAsync(photoEntity, cancellationToken);
-        }
-*/
     }
 }

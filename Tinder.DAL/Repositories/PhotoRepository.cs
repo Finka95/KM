@@ -30,26 +30,6 @@ namespace Tinder.DAL.Repositories
         {
             return _dbSet.AsNoTracking().Include(p => p.User).ToListAsync(cancellationToken);
         }
-
-       /* public async Task<List<PhotoEntity>> UpdateRangeAsync(List<PhotoEntity> photos, CancellationToken cancellationToken)
-        {
-            var entityIds = photos.Select(e => e.Id).ToList();
-            var entitiesFromDb = await _dbSet.Where(e => entityIds.Contains(e.Id)).ToListAsync(cancellationToken);
-
-            foreach (var entity in photos)
-            {
-                var entityFromDb = entitiesFromDb.Find(e => e.Id == entity.Id);
-                if (entityFromDb != null)
-                {
-                    entityFromDb.PhotoURL = entity.PhotoURL;
-                    entityFromDb.IsAvatar = entity.IsAvatar;
-                }
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return photos;
-        }*/
-
         public async Task<PhotoEntity> DeleteAsync(PhotoEntity photo, CancellationToken cancellationToken)
         {
             _dbSet.Remove(photo);
