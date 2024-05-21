@@ -9,7 +9,7 @@ namespace Tinder.API.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class PhotoController
+    public class PhotoController : Controller
     {
         private readonly IPhotoService _photoService;
         private readonly IMapper _mapper;
