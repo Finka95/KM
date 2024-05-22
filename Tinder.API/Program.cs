@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Tinder.API.Extension;
+using Tinder.API.Hubs;
 using Tinder.API.Mapper;
 using Tinder.API.Middleware;
 using Tinder.BLL.DI;
@@ -7,6 +8,7 @@ using Tinder.BLL.DI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSignalR();
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -47,6 +49,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+app.MapHub<ChatHub>("/chat");
 app.MapControllers();
 app.Run();
 
