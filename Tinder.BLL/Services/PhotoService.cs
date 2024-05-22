@@ -50,7 +50,7 @@ namespace Tinder.BLL.Services
             return _mapper.Map<Photo>(entity);
         }
 
-        public async Task<Photo> UpdateAsync(Guid userId, Guid id, CancellationToken cancellationToken)
+        public async Task<Photo> UpdateAvatarAsync(Guid userId, Guid id, CancellationToken cancellationToken)
         {
             var userEntity = await _userRepository.GetByIdAsync(userId, cancellationToken) ?? throw new NotFoundException("User is not found");
             var user = _mapper.Map<User>(userEntity);

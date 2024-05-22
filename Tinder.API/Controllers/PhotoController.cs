@@ -51,9 +51,9 @@ namespace Tinder.API.Controllers
         }
 
         [HttpPut("/{userId}/photos/{id}")]
-        public async Task<PhotoDto> Update(Guid userId, Guid id, CancellationToken cancellationToken)
+        public async Task<PhotoDto> UpdateAvatar(Guid userId, Guid id, CancellationToken cancellationToken)
         {
-            var model = await _photoService.UpdateAsync(userId, id, cancellationToken);
+            var model = await _photoService.UpdateAvatarAsync(userId, id, cancellationToken);
             return _mapper.Map<PhotoDto>(model);
         }
     }
