@@ -22,17 +22,38 @@ namespace Tinder.API.Hubs
             _cache = cache;
         }
 
-        public async Task JoinChat(ChatConnection chatConnection)
+        public async Task JoinChat(ChatConnection connection)
         {
-            var chat = await _chatService.GetByIdAsync(chatConnection.ChatId, cancellationToken: default) ?? throw new NotFoundException("Chat is not found");
-            var user = await _userService.GetByIdAsync(chatConnection.UserId, cancellationToken: default);
+            var chat = await _chatService.GetByIdAsync(connection.ChatId, cancellationToken: default) ?? throw new NotFoundException("Chat is not found");
+            var user = await _userService.GetByIdAsync(connection.UserId, cancellationToken: default) ?? throw new NotFoundException("User is not found");
 
-            var stringConnection = JsonSerializer.Serialize(chatConnection);
+            var stringConnection = JsonSerializer.Serialize(connection);
             await _cache.SetStringAsync(Context.ConnectionId, stringConnection);
 
-            var roomName = chatConnection.ChatId.ToString();
+            var roomName = connection.ChatId.ToString();
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
             await Clients.Group(roomName).ReceiveMessage("MyApp", $"{user.FirstName} is in the chat waiting for your message");
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+
+            var stringConnection = await _cache.GetAsync(Context.ConnectionId);
+            var connection = JsonSerializer.Deserialize<ChatConnection>(stringConnection);
+
+            var user = await _userService.GetByIdAsync(connection.UserId, cancellationToken: default);
+
+            if (connection is not null)
+            {
+                await _cache.RemoveAsync(Context.ConnectionId);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, connection.ChatId.ToString());
+
+                await Clients
+                    .Group(connection.ChatId.ToString())
+                    .ReceiveMessage("MyApp", $"User: {user.FirstName} is not online anymore");
+            }
+
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }
