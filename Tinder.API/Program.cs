@@ -8,6 +8,11 @@ using Tinder.BLL.DI;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    var connection = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = connection;
+});
 builder.Services.AddSignalR();
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
