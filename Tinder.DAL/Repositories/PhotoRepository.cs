@@ -36,5 +36,16 @@ namespace Tinder.DAL.Repositories
             await _context.SaveChangesAsync(cancellationToken);
             return photo;
         }
+
+        public async Task<List<PhotoEntity>> UpdateRangeAsync(List<PhotoEntity> entities, CancellationToken cancellationToken)
+        {
+            foreach (var entity in entities)
+            {
+                _context.Entry(entity).State = EntityState.Modified;
+            }
+            _dbSet.UpdateRange(entities);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entities;
+        }
     }
 }
