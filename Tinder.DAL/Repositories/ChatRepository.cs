@@ -18,5 +18,15 @@ namespace Tinder.DAL.Repositories
                 .Include(c => c.Users)
                 .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
+
+        public Task<ChatEntity> GetByIdWithUsersAndMessagesAsync(Guid id, CancellationToken cancellationToken)
+        {
+            return _dbSet
+                .AsNoTracking()
+                .Include(c => c.Users)
+                .Include(c => c.Messages)
+                .ThenInclude(m => m.User)
+                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        }
     }
 }

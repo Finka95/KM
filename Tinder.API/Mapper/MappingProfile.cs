@@ -16,6 +16,7 @@ namespace Tinder.API.Mapper
             CreateMap<Photo, PhotoDto>();
             CreateMap<CreatePhotoDto, Photo>();
             CreateMap<Message, MessageDto>();
+            CreateMap<CreateMessageDto, Message>();
             CreateMap<Like, LikeDto>();
             CreateMap<CreateLikeDto, Like>();   
             CreateMap<Chat, ChatDto>();
