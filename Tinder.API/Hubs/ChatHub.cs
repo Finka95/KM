@@ -14,7 +14,6 @@ namespace Tinder.API.Hubs
 {
     public class ChatHub : Hub<IChatHub>
     {
-
         private readonly IChatService _chatService;
         private readonly IUserService _userService;
         private readonly IMessageService _messageService;
@@ -63,7 +62,6 @@ namespace Tinder.API.Hubs
         {
             var stringConnection = await _cache.GetAsync(Context.ConnectionId);
             var connection = JsonSerializer.Deserialize<ChatConnection>(stringConnection);
-
 
             if (connection is not null)
             {

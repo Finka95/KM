@@ -9,6 +9,7 @@ namespace Tinder.BLL.Services
     public class ChatService : GenericService<Chat, ChatEntity>, IChatService
     {
         private readonly IChatRepository _chatRepository;
+
         public ChatService(IChatRepository chatRepository, IMapper mapper)
             : base(chatRepository, mapper)
         {
