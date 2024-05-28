@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tinder.API.DTO.CreateDto;
 using Tinder.API.DTO.UpdateDto;
@@ -8,6 +9,7 @@ using Tinder.BLL.Models;
 
 namespace Tinder.API.Controllers
 {
+    [Authorize]
     [Route("api/users")]
     [ApiController]
     public class UserController : Controller

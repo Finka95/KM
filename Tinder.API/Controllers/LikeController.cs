@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tinder.API.DTO.CreateDto;
 using Tinder.API.Models;
@@ -7,6 +8,7 @@ using Tinder.BLL.Models;
 
 namespace Tinder.API.Controllers
 {
+    [Authorize]
     [Route("api/likes")]
     [ApiController]
     public class LikeController : Controller
