@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Tinder.API.Extension;
 using Tinder.API.Hubs;
 using Tinder.API.Mapper;
@@ -66,11 +67,10 @@ builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
     {
-        options.Events = new()
+        options.Events = new JwtBearerEvents()
         {
             OnMessageReceived = context =>
             {
-                // Extract the token from a cookie if available.
                 context.Token = context.Request.Cookies["app.at"];
                 return Task.CompletedTask;
             }
