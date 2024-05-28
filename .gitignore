@@ -290,3 +290,6 @@ __pycache__/
 
 # Logs
 logs
+
+#env
+.env
