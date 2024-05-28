@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using Tinder.API.Extension;
 using Tinder.API.Hubs;
@@ -31,6 +32,36 @@ builder.Host.AddSerilogConfiguration();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Provide a token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer",
+
+                }
+            },
+            new string[]{}
+        }
+    });
+});
+
 builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 
 builder.Services.AddAuthentication()
