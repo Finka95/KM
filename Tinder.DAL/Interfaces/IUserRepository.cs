@@ -4,5 +4,6 @@ namespace Tinder.DAL.Interfaces
 {
     public interface IUserRepository : IGenericRepository<UserEntity>
     {
+        Task<UserEntity> CreateFromJsonAsync(UserEntity entity, CancellationToken cancellationToken);
     }
 }

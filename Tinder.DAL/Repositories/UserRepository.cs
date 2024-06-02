@@ -6,11 +6,18 @@ namespace Tinder.DAL.Repositories
 {
     public class UserRepository : GenericRepository<UserEntity>, IUserRepository
     {
+
         public UserRepository(ApplicationDbContext context) : base(context)
         {
 
         }
 
+        public async Task<UserEntity> CreateFromJsonAsync(UserEntity entity, CancellationToken cancellationToken)
+        {
+            await _dbSet.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            return entity;
+        }
         public override Task<List<UserEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return _dbSet.AsNoTracking()
