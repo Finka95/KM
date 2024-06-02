@@ -6,17 +6,17 @@ using Tinder.BLL.Interfaces;
 using Tinder.BLL.Models;
 using Tinder.DAL.Entities;
 using Tinder.DAL.Interfaces;
-using Tinder.DAL.Repositories;
 
 namespace Tinder.BLL.Services
 {
     public class UserService : GenericService<User, UserEntity>, IUserService
     {
+        private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository repository, IMapper mapper)
             : base(repository, mapper)
         {
-           
+            _userRepository = repository;
         }
 
         public async Task<User> CreateUserFromJson(JsonObject request, CancellationToken cancellationToken)
@@ -24,15 +24,14 @@ namespace Tinder.BLL.Services
             var jsonObject = JObject.Parse(request.ToJsonString());
             var userJson = jsonObject["event"]["user"];
 
-            var fusionAuthId = Guid.Parse(userJson["id"].ToString());
+            var fusionId = Guid.Parse(userJson["id"].ToString());
             var firstName = userJson["firstName"].ToString();
             var lastName = userJson["lastName"].ToString();
             var birthDate = (DateTime)userJson["birthDate"];
 
             var user = new User
             {
-                FusionAuthId = fusionAuthId,
-                Id = fusionAuthId,
+                FusionId = fusionId,
                 FirstName = firstName,
                 LastName = lastName,
                 Age = birthDate.Age()
