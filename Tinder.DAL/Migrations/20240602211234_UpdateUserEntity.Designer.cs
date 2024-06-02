@@ -12,7 +12,7 @@ using Tinder.DAL;
 namespace Tinder.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240602194450_UpdateUserEntity")]
+    [Migration("20240602211234_UpdateUserEntity")]
     partial class UpdateUserEntity
     {
         /// <inheritdoc />
