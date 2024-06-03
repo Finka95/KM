@@ -4,7 +4,7 @@ namespace Tinder.BLL.Extensions
 {
     public static class Extension
     {
-        public static int Age(this DateTime dateTime)
+        public static int CalculateAge(this DateTime dateTime)
         {
             var today = DateTime.Today;
             var age = today.Year - dateTime.Year;

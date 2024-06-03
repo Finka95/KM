@@ -24,17 +24,17 @@ namespace Tinder.BLL.Services
             var jsonObject = JObject.Parse(request.ToJsonString());
             var userJson = jsonObject["event"]["user"];
 
-            var fusionId = Guid.Parse(userJson["id"].ToString());
+            var fusionUserId = Guid.Parse(userJson["id"].ToString());
             var firstName = userJson["firstName"].ToString();
             var lastName = userJson["lastName"].ToString();
             var birthDate = (DateTime)userJson["birthDate"];
 
             var user = new User
             {
-                FusionId = fusionId,
+                FusionUserId = fusionUserId,
                 FirstName = firstName,
                 LastName = lastName,
-                Age = birthDate.Age()
+                Age = birthDate.CalculateAge()
             };
 
             var userEntity = _mapper.Map<UserEntity>(user);
