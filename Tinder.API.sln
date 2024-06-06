@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinder.API", "Tinder.API\Tinder.API.csproj", "{6867C9F8-9C04-4965-BEE9-7D3519A38100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.DAL", "Tinder.DAL\Tinder.DAL.csproj", "{830225FA-CA92-4499-887A-5E120000A59A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinder.DAL", "Tinder.DAL\Tinder.DAL.csproj", "{830225FA-CA92-4499-887A-5E120000A59A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.BLL", "Tinder.BLL\Tinder.BLL.csproj", "{02A652E9-66A6-415C-9480-923588E853A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinder.BLL", "Tinder.BLL\Tinder.BLL.csproj", "{02A652E9-66A6-415C-9480-923588E853A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.Tests", "Tinder.Tests\Tinder.Tests.csproj", "{4BCE74A4-4980-4899-809A-610B1880F31D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.Tests", "Tinder.Tests\Tinder.Tests.csproj", "{62B2BCF5-9AB2-476F-82CB-A9A6DFA936CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{02A652E9-66A6-415C-9480-923588E853A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02A652E9-66A6-415C-9480-923588E853A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02A652E9-66A6-415C-9480-923588E853A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BCE74A4-4980-4899-809A-610B1880F31D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BCE74A4-4980-4899-809A-610B1880F31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BCE74A4-4980-4899-809A-610B1880F31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BCE74A4-4980-4899-809A-610B1880F31D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62B2BCF5-9AB2-476F-82CB-A9A6DFA936CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B2BCF5-9AB2-476F-82CB-A9A6DFA936CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B2BCF5-9AB2-476F-82CB-A9A6DFA936CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B2BCF5-9AB2-476F-82CB-A9A6DFA936CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
