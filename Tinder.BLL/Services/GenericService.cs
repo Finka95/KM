@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Tinder.BLL.Exceptions;
 using Tinder.BLL.Interfaces;
 using Tinder.DAL.Interfaces;
 
@@ -24,8 +25,9 @@ namespace Tinder.BLL.Services
 
         public virtual async Task<TModel> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var entity = await _repository.DeleteByIdAsync(id, cancellationToken);
-            return _mapper.Map<TModel>(entity);
+            _ = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exis");
+            var deletedEntity = await _repository.DeleteByIdAsync(id, cancellationToken);
+            return _mapper.Map<TModel>(deletedEntity);
         }
 
         public virtual async Task<List<TModel>> GetAllAsync(CancellationToken cancellationToken)
@@ -42,6 +44,7 @@ namespace Tinder.BLL.Services
 
         public virtual async Task<TModel> UpdateAsync(Guid id, TModel model, CancellationToken cancellationToken)
         {
+            _ = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist"); ;
             var newEntity = _mapper.Map<TEntity>(model);
             newEntity.Id = id;
             await _repository.UpdateAsync(newEntity, cancellationToken);
