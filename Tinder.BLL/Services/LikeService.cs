@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Tinder.BLL.Exceptions;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Models;
 using Tinder.DAL.Entities;
@@ -23,6 +24,11 @@ namespace Tinder.BLL.Services
         {
             var sender = await _userRepository.GetByIdAsync(like.SenderId, cancellationToken);
             var receiver = await _userRepository.GetByIdAsync(like.ReceiverId, cancellationToken);
+
+            if (sender is null || receiver is null)
+            {
+                throw new NotFoundException("Invalid like model");
+            }
 
             if (sender.ReceivedLikes.Any(l => l.SenderId == receiver.Id))
             {
