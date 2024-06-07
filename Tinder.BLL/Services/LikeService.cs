@@ -45,8 +45,8 @@ namespace Tinder.BLL.Services
                 ReceiverId = receiver.Id,
             };
 
-            await _repository.CreateAsync(likeEntity, cancellationToken);
-            return _mapper.Map<Like>(likeEntity );
+            var newLike = await _repository.CreateAsync(likeEntity, cancellationToken);
+            return _mapper.Map<Like>(newLike);
         }
     }
 }
