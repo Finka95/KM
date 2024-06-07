@@ -13,14 +13,14 @@ using Tinder.DAL.Interfaces;
 
 namespace Tinder.Tests
 {
-    public class UserServiceTests
+    public class GenericServiceTests
     {
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IFixture _fixture;
 
-        public UserServiceTests()
+        public GenericServiceTests()
         {
             _userRepository = Substitute.For<IUserRepository>();
             _mapper = new MapperConfiguration(cfg =>
@@ -103,6 +103,7 @@ namespace Tinder.Tests
             _userRepository
                 .CreateAsync(Arg.Any<UserEntity>(),default)
                 .Returns(entity);
+
             // Act
             var result = await _userService.CreateAsync(model, default);
 
@@ -158,7 +159,7 @@ namespace Tinder.Tests
             var userId = Guid.NewGuid();
             var model = _fixture
                 .Build<User>()
-                .With(e => e.Id, Guid.NewGuid).Create(); ;
+                .With(e => e.Id, Guid.NewGuid).Create();
 
             _userRepository
                 .GetByIdAsync(userId, default)
