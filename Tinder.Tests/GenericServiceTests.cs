@@ -18,7 +18,6 @@ namespace Tinder.Tests
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IFixture _fixture;
 
         public GenericServiceTests()
         {
@@ -28,59 +27,54 @@ namespace Tinder.Tests
                 cfg.AddProfile(new MappingProfile());
             }).CreateMapper();
 
-            _fixture = new Fixture();
-            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-                .ForEach(b => _fixture.Behaviors.Remove(b));
-            _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-
             _userService = new UserService(_userRepository, _mapper);
         }
 
-        [Fact]
-        public async Task GetByIdAsync_ValidId_ReturnUser()
+        [Theory, AutoMoqData]
+        public async Task GetByIdAsync_ValidId_ReturnUser(
+            Guid id,
+            UserEntity entity
+            )
         {
             // Arrange
-            var userId = Guid.NewGuid();
-
-            var entity = _fixture
-                .Build<UserEntity>()
-                .With(e => e.Id, userId)
-                .Create();
+            entity.Id = id;
 
             _userRepository
-                .GetByIdAsync(userId, default)
+                .GetByIdAsync(id, default)
                 .Returns(entity);
 
             // Act
-            var model = await _userService.GetByIdAsync(userId, default);
+            var model = await _userService.GetByIdAsync(id, default);
 
             // Assert
             model.ShouldNotBeNull();
             model.ShouldBeOfType(typeof(User));
-            model.Id.ShouldBe(userId);
+            model.Id.ShouldBe(id);
         }
 
-        [Fact]
-        public async Task GetByIdAsync_InvalidId_ReturnNull()
+        [Theory, AutoMoqData]
+        public async Task GetByIdAsync_InvalidId_ReturnNull(
+            Guid id
+            )
         {
             // Arrange
-            var userId = Guid.NewGuid();
             _userRepository
-                .GetByIdAsync(userId, default)
+                .GetByIdAsync(id, default)
                 .ReturnsNull();
 
             // Act
-            var model = await _userService.GetByIdAsync(userId, default);
+            var model = await _userService.GetByIdAsync(id, default);
             
             // Assert
             model.ShouldBeNull();
         }
 
-        [Fact]
-        public async Task GetAllAsync_ValidData_ReturnListOfUsers()
+        [Theory, AutoMoqData]
+        public async Task GetAllAsync_ValidData_ReturnListOfUsers(
+            List<UserEntity> entities
+            )
         {
             // Arrange
-            var entities = _fixture.Build<List<UserEntity>>().Create();
             _userRepository
                 .GetAllAsync(default)
                 .Returns(entities);
@@ -93,11 +87,12 @@ namespace Tinder.Tests
             result.ShouldBeEquivalentTo(models);
         }
 
-        [Fact]
-        public async Task CreateAsync_ValidUserModel_ShouldCreateUser()
+        [Theory, AutoMoqData]
+        public async Task CreateAsync_ValidUserModel_ShouldCreateUser(
+            UserEntity entity
+            )
         {
             // Arrange
-            var entity = _fixture.Build<UserEntity>().Create();
             var model = _mapper.Map<User>(entity);
 
             _userRepository
@@ -111,12 +106,12 @@ namespace Tinder.Tests
             result.ShouldBeEquivalentTo(model);
         }
 
-        [Fact]
-        public async Task CreateAsync_InvalidUserModel_ReturnNull()
+        [Theory, AutoMoqData]
+        public async Task CreateAsync_InvalidUserModel_ReturnNull(
+            User model
+            )
         {
             // Arrange
-           var model = _fixture.Build<User>().Create();
-
             _userRepository
                 .CreateAsync( Arg.Any<UserEntity>(),default)
                 .ReturnsNull();
@@ -128,88 +123,86 @@ namespace Tinder.Tests
             result.ShouldBeNull();
         }
 
-        [Fact]
-        public async Task UpdateAsync_ValidUserModel_ShouldUpdateUser()
+        [Theory, AutoMoqData]
+        public async Task UpdateAsync_ValidUserModel_ShouldUpdateUser(
+            Guid id,
+            UserEntity entity
+            )
         {
             // Arrange
-            var userId = Guid.NewGuid();
-            var entity = _fixture
-                .Build<UserEntity>()
-                .With(e => e.Id, userId).Create();
+            entity.Id = id;
             var model = _mapper.Map<User>(entity);
 
             _userRepository
-                .GetByIdAsync(userId, default)
+                .GetByIdAsync(id, default)
                 .Returns(entity);
 
             _userRepository
                 .UpdateAsync(Arg.Any<UserEntity>(), default)
                 .Returns(entity);
             // Act
-            var result = await _userService.UpdateAsync(userId, model, default);
+            var result = await _userService.UpdateAsync(id, model, default);
 
             // Assert
             result.ShouldBeEquivalentTo(model);
         }
 
-        [Fact]
-        public async Task UpdateAsync_InvalidUserModel_ShouldUpdateUser()
+        [Theory, AutoMoqData]
+        public void UpdateAsync_InvalidUserModel_ShouldUpdateUser(
+            Guid id,
+            User model
+            )
         {
             // Arrange
-            var userId = Guid.NewGuid();
-            var model = _fixture
-                .Build<User>()
-                .With(e => e.Id, Guid.NewGuid).Create();
+           model.Id = id;
 
             _userRepository
-                .GetByIdAsync(userId, default)
+                .GetByIdAsync(id, default)
                 .ReturnsNull();
 
             // Act
-            var action = async () => await _userService.UpdateAsync(userId, model, default);
+            var action = async () => await _userService.UpdateAsync(id, model, default);
 
             // Assert
             action.ShouldThrow<NotFoundException>();
         }
 
-        [Fact]
-        public async Task DeleteAsync_ValidId_ShouldDeleteUser()
+        [Theory, AutoMoqData]
+        public async Task DeleteAsync_ValidId_ShouldDeleteUser(
+            Guid id,
+            UserEntity entity)
         {
             // Arrange
-            var userId = Guid.NewGuid();
-            var entity = _fixture
-                .Build<UserEntity>()
-                .With(e => e.Id, userId)
-                .Create();
+            entity.Id = id;
             var model = _mapper.Map<User>(entity);
 
             _userRepository
-                .GetByIdAsync(userId, default)
+                .GetByIdAsync(id, default)
                 .Returns(entity);
 
             _userRepository
-                .DeleteByIdAsync(userId, default)
+                .DeleteByIdAsync(id, default)
                 .Returns(entity);
 
             // Act
-            var result = await _userService.DeleteAsync(userId, default);
+            var result = await _userService.DeleteAsync(id, default);
 
             // Assert
             result.ShouldBeEquivalentTo(model);
         }
 
-        [Fact]
-        public async Task DeleteAsync_InValidId_ShouldReturnNull()
+        [Theory, AutoMoqData]
+        public void DeleteAsync_InValidId_ShouldReturnNull(
+            Guid id
+            )
         {
             // Arrange
-            var userId = Guid.NewGuid();
-
             _userRepository
-                .GetByIdAsync(userId, default)
+                .GetByIdAsync(id, default)
                 .ReturnsNull();
 
             // Act
-            var action = async() => await _userService.DeleteAsync(userId, default);
+            var action = async() => await _userService.DeleteAsync(id, default);
 
             // Assert
             action.ShouldThrow<NotFoundException>();
