@@ -19,7 +19,6 @@ namespace Tinder.Tests
         private readonly ILikeRepository _likeRepository;
         private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
-        private readonly IFixture _fixture;
         private readonly ILikeService _likeService;
 
         public LikeServiceTests()
@@ -33,55 +32,43 @@ namespace Tinder.Tests
                 cfg.AddProfile(new MappingProfile());
             }).CreateMapper();
 
-            _fixture = new Fixture();
-            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-                .ForEach(b => _fixture.Behaviors.Remove(b));
-            _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-
             _likeService = new LikeService(_likeRepository, _mapper, _userRepository, _chatRepository);
         }
 
-        [Fact]
-        public async Task CreateAsync_ValidLikeModelWithMatch_ShouldCreateLikeAndChat()
+        [Theory, AutoMoqData]
+        public async Task CreateAsync_ValidLikeModelWithMatch_ShouldCreateLikeAndChat(
+            Guid senderId,
+            Guid receiverId,
+            UserEntity senderEntity,
+            UserEntity receiverEntity,
+            ChatEntity chatEntity,
+            LikeEntity senderReceivedLike,
+            LikeEntity receiverSentLike,
+            LikeEntity likeEntity
+            )
         {
             // Arrange
-            var senderId = Guid.NewGuid();
-            var receiverId = Guid.NewGuid();
+            senderEntity.Id = senderId;
+            receiverEntity.Id = receiverId;
 
-            var senderEntity = _fixture
-                .Build<UserEntity>()
-                .With(u => u.Id, senderId)
-                .Create();
+            senderReceivedLike.ReceiverId = senderId;
+            senderReceivedLike.SenderId = receiverId;
 
-            var receiverEntity = _fixture
-                .Build<UserEntity>()
-                .With(u => u.Id, receiverId)
-                .Create();
+            receiverSentLike.ReceiverId = senderId;
+            receiverSentLike.SenderId = receiverId;
 
-            senderEntity.ReceivedLikes.Add(_fixture
-                .Build<LikeEntity>()
-                .With(l => l.ReceiverId, senderId)
-                .With(l => l.SenderId, receiverId)
-                .Create());
+            senderEntity.ReceivedLikes.Add(senderReceivedLike);
+            receiverEntity.SentLikes.Add(receiverSentLike);
 
-            receiverEntity.SentLikes.Add(_fixture
-                .Build<LikeEntity>()
-                .With(l => l.ReceiverId, senderId)
-                .With(l => l.SenderId, receiverId)
-                .Create());
+            chatEntity.Users.Clear();
+            chatEntity.Users.Add(senderEntity);
+            chatEntity.Users.Add(receiverEntity);
 
-            var chatEntity = _fixture
-                .Build<ChatEntity>()
-                .With(c => c.Users, [senderEntity, receiverEntity])
-                .Create();
 
-            var likeEntity = _fixture
-                .Build<LikeEntity>()
-                .With(l => l.SenderId, senderId)
-                .With(l => l.ReceiverId, receiverId)
-                .With(l => l.SenderUser, senderEntity)
-                .With(l => l.ReceiverUser, receiverEntity)
-                .Create();
+            likeEntity.ReceiverId = receiverId;
+            likeEntity.SenderId = senderId;
+            likeEntity.ReceiverUser = receiverEntity;
+            likeEntity.SenderUser = senderEntity;
 
             var likeModel = _mapper.Map<Like>(likeEntity);
             
@@ -99,32 +86,26 @@ namespace Tinder.Tests
 
         }
 
-        [Fact]
-        public async Task CreateAsync_ValidLikeModelWithoutMatch_ShouldCreateOnlyLike()
+        [Theory, AutoMoqData]
+        public async Task CreateAsync_ValidLikeModelWithoutMatch_ShouldCreateOnlyLike(
+            Guid senderId,
+            Guid receiverId,
+            UserEntity senderEntity,
+            UserEntity receiverEntity,
+            LikeEntity likeEntity
+            )
         {
             // Arrange
-            var senderId = Guid.NewGuid();
-            var receiverId = Guid.NewGuid();
+            senderEntity.Id = senderId;
+            receiverEntity.Id = receiverId;
 
-            var senderEntity = _fixture
-                .Build<UserEntity>()
-                .With(u => u.Id, senderId)
-                .Create();
-
-            var receiverEntity = _fixture
-                .Build<UserEntity>()
-                .With(u => u.Id, receiverId)
-                .Create();
-
-            var likeEntity = _fixture
-                .Build<LikeEntity>()
-                .With(l => l.SenderId, senderId)
-                .With(l => l.ReceiverId, receiverId)
-                .With(l => l.SenderUser, senderEntity)
-                .With(l => l.ReceiverUser, receiverEntity)
-                .Create();
+            likeEntity.ReceiverId = receiverId;
+            likeEntity.SenderId = senderId;
+            likeEntity.ReceiverUser = receiverEntity;
+            likeEntity.SenderUser = senderEntity;
 
             var likeModel = _mapper.Map<Like>(likeEntity);
+
             _userRepository.GetByIdAsync(senderId, default).Returns(senderEntity);
             _userRepository.GetByIdAsync(receiverId, default).Returns(receiverEntity);
             _likeRepository.CreateAsync(Arg.Any<LikeEntity>(), default).Returns(likeEntity);
@@ -137,11 +118,12 @@ namespace Tinder.Tests
             result.Id.ShouldBeEquivalentTo(likeModel.Id);
         }
 
-        [Fact]
-        public async Task CreateAsync_InvalidLikeModel_ShouldReturnNull()
+        [Theory, AutoMoqData]
+        public async Task CreateAsync_InvalidLikeModel_ShouldReturnNull(
+            Like likeModel
+            )
         {
             // Arrange
-            var likeModel = _fixture.Create<Like>();
             _userRepository.GetByIdAsync(Arg.Any<Guid>(), default).ReturnsNull();
             _userRepository.GetByIdAsync(Arg.Any<Guid>(), default).ReturnsNull();
             _likeRepository.CreateAsync(Arg.Any<LikeEntity>(), default).ReturnsNull();
