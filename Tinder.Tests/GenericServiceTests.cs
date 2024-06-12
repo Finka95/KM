@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoMapper;
+﻿using AutoMapper;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Shouldly;
@@ -32,11 +31,11 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task GetByIdAsync_ValidId_ReturnUser(
-            Guid id,
             UserEntity entity
             )
         {
             // Arrange
+            var id = Guid.NewGuid();
             entity.Id = id;
 
             _userRepository
@@ -52,12 +51,11 @@ namespace Tinder.Tests
             model.Id.ShouldBe(id);
         }
 
-        [Theory, AutoMoqData]
-        public async Task GetByIdAsync_InvalidId_ReturnNull(
-            Guid id
-            )
+        [Fact]
+        public async Task GetByIdAsync_InvalidId_ReturnNull()
         {
             // Arrange
+            var id = Guid.NewGuid();
             _userRepository
                 .GetByIdAsync(id, default)
                 .ReturnsNull();
@@ -125,11 +123,11 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task UpdateAsync_ValidUserModel_ShouldUpdateUser(
-            Guid id,
             UserEntity entity
             )
         {
             // Arrange
+            var id = Guid.NewGuid();
             entity.Id = id;
             var model = _mapper.Map<User>(entity);
 
@@ -149,11 +147,11 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public void UpdateAsync_InvalidUserModel_ShouldUpdateUser(
-            Guid id,
             User model
             )
         {
             // Arrange
+           var id = Guid.NewGuid();
            model.Id = id;
 
             _userRepository
@@ -169,10 +167,10 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task DeleteAsync_ValidId_ShouldDeleteUser(
-            Guid id,
             UserEntity entity)
         {
             // Arrange
+            var id = Guid.NewGuid();
             entity.Id = id;
             var model = _mapper.Map<User>(entity);
 
@@ -191,12 +189,11 @@ namespace Tinder.Tests
             result.ShouldBeEquivalentTo(model);
         }
 
-        [Theory, AutoMoqData]
-        public void DeleteAsync_InValidId_ShouldReturnNull(
-            Guid id
-            )
+        [Fact]
+        public void DeleteAsync_InValidId_ShouldReturnNull()
         {
             // Arrange
+            var id = Guid.NewGuid();
             _userRepository
                 .GetByIdAsync(id, default)
                 .ReturnsNull();

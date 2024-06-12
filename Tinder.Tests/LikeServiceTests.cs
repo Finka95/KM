@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using AutoMapper;
+﻿using AutoMapper;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Shouldly;
@@ -37,8 +36,6 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task CreateAsync_ValidLikeModelWithMatch_ShouldCreateLikeAndChat(
-            Guid senderId,
-            Guid receiverId,
             UserEntity senderEntity,
             UserEntity receiverEntity,
             ChatEntity chatEntity,
@@ -48,6 +45,9 @@ namespace Tinder.Tests
             )
         {
             // Arrange
+            var senderId = Guid.NewGuid();
+            var receiverId = Guid.NewGuid();
+
             senderEntity.Id = senderId;
             receiverEntity.Id = receiverId;
 
@@ -88,14 +88,15 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task CreateAsync_ValidLikeModelWithoutMatch_ShouldCreateOnlyLike(
-            Guid senderId,
-            Guid receiverId,
             UserEntity senderEntity,
             UserEntity receiverEntity,
             LikeEntity likeEntity
             )
         {
             // Arrange
+            var senderId = Guid.NewGuid();
+            var receiverId = Guid.NewGuid();
+
             senderEntity.Id = senderId;
             receiverEntity.Id = receiverId;
 

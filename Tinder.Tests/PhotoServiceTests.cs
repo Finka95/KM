@@ -33,13 +33,14 @@ namespace Tinder.Tests
             
         [Theory, AutoMoqData]
         public async Task CreateAsync_ValidRequestUserHasAvatar_ShouldCreateNewAvatarAndUpdatePreviousAvatar(
-            Guid userId,
             Photo photoModel,
             UserEntity userEntity,
             PhotoEntity previousAvatarEntity
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+
             previousAvatarEntity.IsAvatar = true;
             previousAvatarEntity.UserId = userId;
 
@@ -75,13 +76,14 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task CreateAsync_ValidRequestUserDoesNotHaveAvatar_ShouldCreateNewAvatarWithoutUpdatingPreviousAvatar(
-            Guid userId,
             Photo photoModel,
             UserEntity userEntity,
             PhotoEntity nonAvatarPhotoEntity
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+
             nonAvatarPhotoEntity.IsAvatar = false;
             nonAvatarPhotoEntity.UserId = userId;
 
@@ -115,12 +117,13 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task CreateAsync_ValidRequest_ShouldCreateNonAvatarPhoto(
-            Guid userId,
             Photo photoModel,
             UserEntity userEntity
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+
             photoModel.IsAvatar = false;
             photoModel.Id = userId;
 
@@ -147,11 +150,12 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task CreateAsync_InvalidId_ShouldThrowException(
-            Guid userId,
             Photo photoModel
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+
             _userRepository.GetByIdAsync(userId, default).ReturnsNull();
             
             // Act
@@ -166,12 +170,13 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task GetByIdAsync_ValidRequest_ShouldReturnPhoto(
-            Guid userId,
-            Guid photoId,
             PhotoEntity photoEntity
             )
         {
             // Arrange 
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             photoEntity.UserId = userId;
             photoEntity.Id = photoId;
 
@@ -188,13 +193,13 @@ namespace Tinder.Tests
             result.ShouldBeEquivalentTo(photoModel);
         }
 
-        [Theory, AutoMoqData]
-        public void GetByIdAsync_InvalidRequest_ShouldThrowException(
-            Guid userId,
-            Guid photoId
-            )
+        [Fact]
+        public void GetByIdAsync_InvalidRequest_ShouldThrowException()
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             _photoRepository.GetByIdAsync(userId, photoId, default).ReturnsNull();
 
             // Act
@@ -206,12 +211,13 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task DeleteAsync_ValidRequest_ShouldDeletePhoto(
-             Guid userId,
-             Guid photoId,
              PhotoEntity photoEntity
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             photoEntity.UserId = userId;
             photoEntity.Id = photoId;
 
@@ -226,13 +232,13 @@ namespace Tinder.Tests
             result.ShouldBeEquivalentTo(photoModel);
         }
 
-        [Theory, AutoMoqData]
-        public void DeleteAsync_InvalidRequest_ShouldThrowException(
-            Guid userId,
-            Guid photoId
-            )
+        [Fact]
+        public void DeleteAsync_InvalidRequest_ShouldThrowException()
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             _photoRepository.GetByIdAsync(photoId, userId, default).ReturnsNull();
 
             // Act
@@ -245,14 +251,15 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task UpdateAvatarAsync_ValidRequestUserHasAvatar_ShouldCreateNewAvatar(
-            Guid userId,
-            Guid photoId,
             UserEntity userEntity,
             PhotoEntity previousAvatarEntity,
             PhotoEntity photoEntity
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             userEntity.Id = userId;
 
             photoEntity.Id = photoId;
@@ -287,13 +294,14 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public async Task UpdateAvatarAsync_ValidRequestUserDoesNotHaveAvatar_ShouldCreateAvatar(
-            Guid userId,
-            Guid photoId,
             UserEntity userEntity,
             PhotoEntity photoEntity
             )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             userEntity.Id = userId;
 
             photoEntity.Id = photoId;
@@ -316,13 +324,13 @@ namespace Tinder.Tests
             result.IsAvatar.ShouldBeTrue();
         }
 
-        [Theory, AutoMoqData]
-        public void UpdateAvatarAsync_InvalidUserId_ShouldThrowException(
-            Guid userId,
-            Guid photoId
-        )
+        [Fact]
+        public void UpdateAvatarAsync_InvalidUserId_ShouldThrowException()
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             _userRepository.GetByIdAsync(userId, default).ReturnsNull();
 
             // Act
@@ -335,12 +343,13 @@ namespace Tinder.Tests
 
         [Theory, AutoMoqData]
         public void UpdateAvatarAsync_InvalidPhotoId_ShouldThrowException(
-            Guid userId,
-            Guid photoId,
             UserEntity userEntity
         )
         {
             // Arrange
+            var userId = Guid.NewGuid();
+            var photoId = Guid.NewGuid();
+
             userEntity.Id = userId;
 
             _userRepository.GetByIdAsync(userId, default).Returns(userEntity);
