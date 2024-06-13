@@ -61,6 +61,7 @@ namespace Tinder.BLL.Services
             var previousAvatar = user.Photos.FirstOrDefault(p => p.IsAvatar);
             if (previousAvatar is null)
             {
+                _photoRepository.UpdateAsync(photoEntity, cancellationToken);
                 return _mapper.Map<Photo>(photoEntity);
             }
 
