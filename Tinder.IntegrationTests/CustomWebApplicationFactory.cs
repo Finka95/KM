@@ -39,9 +39,6 @@ namespace Tinder.IntegrationTests
 
                     db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-                    db.Database.EnsureDeleted();
-                    db.Database.EnsureCreated();
-
                     InitializeDb.InitializeDbForTests(db);
                 }
             });
