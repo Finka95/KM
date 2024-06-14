@@ -2,11 +2,11 @@
 
 namespace Tinder.IntegrationTests
 {
-    internal class BaseTestClass : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class BaseTestClass : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         protected readonly HttpClient _httpClient;
 
-        internal BaseTestClass(CustomWebApplicationFactory<Program> factory)
+        public BaseTestClass(CustomWebApplicationFactory<Program> factory)
         {
             _httpClient = factory.CreateClient(new WebApplicationFactoryClientOptions
             {

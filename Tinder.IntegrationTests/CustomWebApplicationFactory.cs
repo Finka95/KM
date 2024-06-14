@@ -9,7 +9,7 @@ using Tinder.IntegrationTests.Utilities;
 
 namespace Tinder.IntegrationTests
 {
-    internal class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
+    public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
