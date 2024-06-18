@@ -1,4 +1,5 @@
 using Serilog;
+using SubscriptionService.API.Middlewares;
 using SubscriptionService.BLL.DI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
