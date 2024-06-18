@@ -18,6 +18,8 @@ namespace SubscriptionService.BLL.Services
         public async Task<Subscription> CreateAsync(Subscription subscription, CancellationToken cancellationToken)
         {
             var modelToCreate = subscription.Adapt<SubscriptionEntity>();
+            modelToCreate.CreatedAt = DateTime.Now;
+            modelToCreate.ExpiresAt = DateTime.Now.AddMonths(1);
             var entity = await _subscriptionRepository.CreateAsync(modelToCreate, cancellationToken);
             return entity.Adapt<Subscription>();
         }
