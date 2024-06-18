@@ -11,6 +11,7 @@ namespace SubscriptionService.DAL.DI
         {
             services.Configure<MongoDatabaseConfiguration>(configuration.GetSection("MongoDB"));
             services.AddScoped<IApplicationMongoDbContext, ApplicationMongoDbContext>();
+            services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         }
     }
 }
