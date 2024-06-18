@@ -6,7 +6,7 @@ using SubscriptionService.DAL.Entities;
 using SubscriptionService.DAL.Interfaces;
 using System.Text.Json.Nodes;
 using SubscriptionService.Domain.Enums;
-using Tinder.BLL.Exceptions;
+using SubscriptionService.Domain.Exceptions;
 
 namespace SubscriptionService.BLL.Services
 {

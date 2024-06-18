@@ -1,4 +1,4 @@
-﻿namespace Tinder.BLL.Exceptions
+﻿namespace SubscriptionService.Domain.Exceptions
 {
     public class NotFoundException : Exception
     {
