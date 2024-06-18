@@ -37,7 +37,7 @@ namespace SubscriptionService.BLL.Services
             var subscription = new Subscription
             {
                 Id = Guid.NewGuid(),
-                UserId = fusionUserId,
+                FusionUserId = fusionUserId,
                 Type = SubscriptionType.Base,
                 CreatedAt = DateTime.Now,
                 ExpiresAt = DateTime.Now.AddMonths(1)
