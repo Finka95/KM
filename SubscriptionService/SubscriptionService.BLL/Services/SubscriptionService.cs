@@ -1,8 +1,11 @@
 ﻿using Mapster;
+using Newtonsoft.Json.Linq;
 using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.BLL.Models;
 using SubscriptionService.DAL.Entities;
 using SubscriptionService.DAL.Interfaces;
+using System.Text.Json.Nodes;
+using SubscriptionService.Domain.Enums;
 using Tinder.BLL.Exceptions;
 
 namespace SubscriptionService.BLL.Services
@@ -24,6 +27,27 @@ namespace SubscriptionService.BLL.Services
             return entity.Adapt<Subscription>();
         }
 
+        public async Task<Subscription> CreateSubscriptionAfterUserRegistration(JsonObject request, CancellationToken cancellationToken)
+        {
+            var jsonObject = JObject.Parse(request.ToJsonString());
+            var userJson = jsonObject["event"]["user"];
+
+            var fusionUserId = Guid.Parse(userJson["id"].ToString());
+
+            var subscription = new Subscription
+            {
+                Id = Guid.NewGuid(),
+                UserId = fusionUserId,
+                Type = SubscriptionType.Base,
+                CreatedAt = DateTime.Now,
+                ExpiresAt = DateTime.Now.AddMonths(1)
+            };
+
+            var subscriptionEntity = subscription.Adapt<SubscriptionEntity>();
+            var createdSubscription = await _subscriptionRepository.CreateAsync(subscriptionEntity, cancellationToken);
+            return createdSubscription.Adapt<Subscription>();
+        }
+        
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var subscriptionEntity = await _subscriptionRepository.GetByIdAsync(id, cancellationToken);
