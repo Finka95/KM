@@ -20,6 +20,7 @@ namespace SubscriptionService.BLL.DI
             services.AddSingleton(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
 
+            services.AddHostedService<CheckIsSubscriptionExpiredBackgroundService>();
             services.AddMassTransit(busConfiguration =>
             {
                 busConfiguration.SetKebabCaseEndpointNameFormatter();
