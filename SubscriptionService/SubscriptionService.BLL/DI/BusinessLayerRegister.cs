@@ -24,6 +24,7 @@ namespace SubscriptionService.BLL.DI
             {
                 busConfiguration.SetKebabCaseEndpointNameFormatter();
 
+                busConfiguration.AddConsumer<UserCreatedConsumer>();
                 busConfiguration.UsingRabbitMq((context, cfg) =>
                 {
                     var settings = context.GetRequiredService<MessageBrokerSettings>();
