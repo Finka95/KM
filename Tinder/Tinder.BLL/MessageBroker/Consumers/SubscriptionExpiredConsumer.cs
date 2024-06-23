@@ -3,7 +3,7 @@ using Shared.Events;
 using System.Text.Json;
 using Tinder.BLL.Interfaces;
 
-namespace Tinder.BLL.MessageBroker
+namespace Tinder.BLL.MessageBroker.Consumers
 {
     public class SubscriptionExpiredConsumer : IConsumer<SubscriptionExpired>
     {

@@ -8,6 +8,7 @@ using Tinder.BLL.MessageBroker;
 using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Services;
 using Tinder.DAL.DI;
+using Tinder.BLL.MessageBroker.Consumers;
 
 namespace Tinder.BLL.DI
 {

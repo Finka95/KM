@@ -2,7 +2,7 @@
 using Shared.Events;
 using Tinder.BLL.Interfaces;
 
-namespace Tinder.BLL.MessageBroker
+namespace Tinder.BLL.MessageBroker.Consumers
 {
     public class SubscriptionUpdatedConsumer : IConsumer<SubscriptionUpdated>
     {
