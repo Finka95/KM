@@ -4,7 +4,6 @@ namespace SubscriptionService.API.ViewModels
 {
     public class SubscriptionCreationViewModel
     {
-        public Guid FusionUserId { get; set; }
-        public SubscriptionType Type { get; set; }
+        public SubscriptionType SubscriptionType { get; set; }
     }
 }
