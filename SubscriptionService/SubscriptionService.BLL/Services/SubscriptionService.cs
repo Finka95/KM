@@ -24,8 +24,8 @@ namespace SubscriptionService.BLL.Services
 
         public async Task<Subscription> CreateAsync(Guid fusionUserId, Subscription subscription, CancellationToken cancellationToken)
         { 
-            var userSubscription = _subscriptionRepository.GetByFusionUserIdAsync(fusionUserId, cancellationToken);
-            if (userSubscription != null)
+            var userSubscription = await _subscriptionRepository.GetByFusionUserIdAsync(fusionUserId, cancellationToken);
+            if (userSubscription.Id == Guid.Empty)
             {
                 throw new BadRequestException("User already has subscription");
             }
