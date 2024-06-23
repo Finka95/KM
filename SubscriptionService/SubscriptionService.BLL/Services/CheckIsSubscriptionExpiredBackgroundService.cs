@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using Mapster;
-using MassTransit;
+﻿using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.Events;

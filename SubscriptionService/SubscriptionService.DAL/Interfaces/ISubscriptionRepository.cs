@@ -1,5 +1,4 @@
 ﻿using SubscriptionService.DAL.Entities;
-using SubscriptionService.Domain.Enums;
 
 namespace SubscriptionService.DAL.Interfaces
 {
