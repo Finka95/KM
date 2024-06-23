@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using SubscriptionService.API.ViewModels;
 using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.BLL.Models;
+using SubscriptionService.Domain.Enums;
 
 namespace SubscriptionService.API.Controllers
 {
     [Route("api/subscriptions")]
     [ApiController]
-    public class SubscriptionController
+    public class SubscriptionController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
         public SubscriptionController(ISubscriptionService subscriptionService)
@@ -31,18 +32,25 @@ namespace SubscriptionService.API.Controllers
             return subscriptionModel.Adapt<SubscriptionViewModel>();
         }
 
-        [HttpPost]
-        public async Task<SubscriptionViewModel> CreateAsync(SubscriptionCreationViewModel subscriptionCreationViewModel, CancellationToken cancellationToken)
+        [HttpPost("{fusionUserId}")]
+        public async Task<SubscriptionViewModel> CreateAsync(Guid fusionUserId, SubscriptionCreationViewModel subscriptionCreationViewModel, CancellationToken cancellationToken)
         {
             var subscriptionToCreate = subscriptionCreationViewModel.Adapt<Subscription>();
-            var createdSubscription = await _subscriptionService.CreateAsync(subscriptionToCreate, cancellationToken);
+            var createdSubscription = await _subscriptionService.CreateAsync(fusionUserId, subscriptionToCreate, cancellationToken);
             return createdSubscription.Adapt<SubscriptionViewModel>();
         }
         
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public Task DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             return _subscriptionService.DeleteAsync(id, cancellationToken);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<SubscriptionViewModel> UpdateAsync(Guid id, SubscriptionType subscriptionType, CancellationToken cancellationToken)
+        {
+            var subscriptionModel = await _subscriptionService.UpdateAsync(id, subscriptionType, cancellationToken);
+            return subscriptionModel.Adapt<SubscriptionViewModel>();
         }
     }
 }

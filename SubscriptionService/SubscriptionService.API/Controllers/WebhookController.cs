@@ -8,7 +8,7 @@ namespace Tinder.API.Controllers
 {
     [Route("api/webhook")]
     [ApiController]
-    public class WebhookController : Controller
+    public class WebhookController : ControllerBase
     {
         private readonly ISubscriptionService _subscriptionService;
 
