@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Events;
 using Tinder.API.DTO.CreateDto;
 using Tinder.API.DTO.UpdateDto;
 using Tinder.API.Models;
@@ -12,15 +12,17 @@ namespace Tinder.API.Controllers
     [Authorize]
     [Route("api/users")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly ICacheService _cacheService;
 
-        public UserController(IUserService userService, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper, ICacheService cacheService)
         {
             _userService = userService;
             _mapper = mapper;
+            _cacheService = cacheService;
         }
 
         [HttpGet("{id}")]
