@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinder.BLL", "Tinder.BLL\Ti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinder.Tests", "Tinder.Tests\Tinder.Tests.csproj", "{62B2BCF5-9AB2-476F-82CB-A9A6DFA936CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.IntegrationTests", "Tinder.IntegrationTests\Tinder.IntegrationTests.csproj", "{DE6208E0-45A8-455A-97A0-8B71E51128E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinder.IntegrationTests", "Tinder.IntegrationTests\Tinder.IntegrationTests.csproj", "{DE6208E0-45A8-455A-97A0-8B71E51128E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "..\Shared\Shared\Shared.csproj", "{D350128B-FF4A-4E09-951C-76026901E48D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{DE6208E0-45A8-455A-97A0-8B71E51128E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE6208E0-45A8-455A-97A0-8B71E51128E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE6208E0-45A8-455A-97A0-8B71E51128E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D350128B-FF4A-4E09-951C-76026901E48D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D350128B-FF4A-4E09-951C-76026901E48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D350128B-FF4A-4E09-951C-76026901E48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D350128B-FF4A-4E09-951C-76026901E48D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

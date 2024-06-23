@@ -1,7 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Mapper;
+using Tinder.BLL.MessageBroker;
+using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Services;
 using Tinder.DAL.DI;
 
@@ -19,6 +23,27 @@ namespace Tinder.BLL.DI
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IMessageService, MessageService>();
+
+            services.Configure<MessageBrokerSettings>(configuration.GetSection("MessageBroker"));
+            services.AddSingleton(serviceProvider =>
+                serviceProvider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+
+            services.AddMassTransit(busConfiguration =>
+            {
+                busConfiguration.SetKebabCaseEndpointNameFormatter();
+
+                busConfiguration.UsingRabbitMq((context, configurator) =>
+                {
+                    var settings = context.GetRequiredService<MessageBrokerSettings>();
+                    configurator.Host(new Uri(settings.Host), hostConfigure =>
+                    {
+                        hostConfigure.Username(settings.Username);
+                        hostConfigure.Password(settings.Password);
+                    });
+
+                   configurator.ConfigureEndpoints(context);
+                });
+            });
         }
     }
 }
