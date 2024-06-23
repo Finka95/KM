@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Tinder.BLL.Models;
+using Shared.Events;
+using Tinder.BLL.Models;        
 using Tinder.DAL.Entities;
 
 namespace Tinder.BLL.Mapper
@@ -13,6 +14,7 @@ namespace Tinder.BLL.Mapper
             CreateMap<MessageEntity, Message>().ReverseMap();
             CreateMap<PhotoEntity, Photo>().ReverseMap();
             CreateMap<LikeEntity, Like>().ReverseMap();
+            CreateMap<UserEntity, UserCreated>();
         }
     }
 }
