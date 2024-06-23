@@ -44,6 +44,7 @@ namespace Tinder.BLL.DI
                    configurator.ConfigureEndpoints(context);
                 });
             });
+            services.AddScoped<IEventBus, EventBus>();
         }
     }
 }
