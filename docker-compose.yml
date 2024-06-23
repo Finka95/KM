@@ -89,10 +89,29 @@ services:
     volumes:
       - mongodb_data_container:/data/db
 
+  rabbitmq:
+    container_name: "rabbitmq" 
+    image: rabbitmq:3-management-alpine
+    restart: always
+    hostname: rabbit
+    environment: 
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672" # Rabbitmq instance 
+      - "15672:15672" # Web interface
+    networks:
+        - rabbitmq_go_net
+
 networks:
   db_net:
     driver: bridge
   search_net:
+    driver: bridge
+  rabbitmq_go_net:
     driver: bridge
 
 volumes:
@@ -100,3 +119,4 @@ volumes:
   fusionauth_config:
   search_data:
   mongodb_data_container:  
+  rabbitmq_data:
