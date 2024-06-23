@@ -29,6 +29,11 @@ namespace Tinder.DAL.Repositories
                 .ToListAsync(cancellationToken);
         }
 
+        public Task<UserEntity> GetByFusionUserId(Guid fusionUserId, CancellationToken cancellationToken)
+        {
+            return _dbSet.AsNoTracking().FirstOrDefaultAsync(u => u.FusionUserId == fusionUserId, cancellationToken);
+        }
+
         public override Task<UserEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return _dbSet.AsNoTracking()
