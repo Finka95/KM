@@ -1,4 +1,5 @@
 ﻿using SubscriptionService.DAL.Entities;
+using SubscriptionService.Domain.Enums;
 
 namespace SubscriptionService.DAL.Interfaces
 {
@@ -9,6 +10,11 @@ namespace SubscriptionService.DAL.Interfaces
         public Task<SubscriptionEntity> CreateAsync(SubscriptionEntity subscriptionEntity,
             CancellationToken cancellationToken);
         public Task DeleteAsync(SubscriptionEntity subscriptionEntity,
+            CancellationToken cancellationToken);
+
+        public Task<SubscriptionEntity> GetByFusionUserIdAsync(Guid fusionUserId, CancellationToken cancellationToken);
+
+        public Task UpdateAsync(Guid id, SubscriptionEntity subscriptionEntity,
             CancellationToken cancellationToken);
     }
 }

@@ -36,5 +36,23 @@ namespace SubscriptionService.DAL.Repositories
         {
             return _subscriptionCollection.Find(e => e.Id == id).FirstOrDefaultAsync(cancellationToken);
         }
+
+        public Task<SubscriptionEntity> GetByFusionUserIdAsync(Guid fusionUserId, CancellationToken cancellationToken)
+        {
+            return _subscriptionCollection.Find(e => e.FusionUserId == fusionUserId).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task UpdateAsync(Guid id, SubscriptionEntity subscriptionEntity, CancellationToken cancellationToken)
+        {
+            var filter = new FilterDefinitionBuilder<SubscriptionEntity>().Where(s => s.Id == id);
+            var updateDefinition = new UpdateDefinitionBuilder<SubscriptionEntity>()
+                .Set(s => s.Id, subscriptionEntity.Id)
+                .Set(s => s.FusionUserId, subscriptionEntity.FusionUserId)
+                .Set(s => s.UpdatedAt, DateTime.Now)
+                .Set(s => s.CreatedAt, subscriptionEntity.CreatedAt)
+                .Set(s => s.ExpiresAt, DateTime.Now.AddMonths(1))
+                .Set(s => s.SubscriptionType, subscriptionEntity.SubscriptionType);
+           await _subscriptionCollection.UpdateOneAsync(filter, updateDefinition, null, cancellationToken);
+        }
     }
 }
