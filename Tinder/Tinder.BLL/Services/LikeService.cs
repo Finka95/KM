@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Shared.Enums;
+using Tinder.Bll.Exceptions;
 using Tinder.BLL.Exceptions;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Models;
@@ -11,18 +13,34 @@ namespace Tinder.BLL.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IChatRepository _chatRepository;
+        private readonly ICacheService _cacheService;
+        private readonly ILikeRepository _likeRepository;
 
         public LikeService(ILikeRepository repository, IMapper mapper,
-            IUserRepository userRepository, IChatRepository chatRepository)
+            IUserRepository userRepository, IChatRepository chatRepository, ICacheService cacheService)
             : base(repository, mapper)
         {
+            _likeRepository = repository;
             _userRepository = userRepository;
             _chatRepository = chatRepository;
+            _cacheService = cacheService;
         }
 
         public override async Task<Like> CreateAsync(Like like, CancellationToken cancellationToken)
         {
+            const int likeAmountDayLimit = 2;
+
             var sender = await _userRepository.GetByIdAsync(like.SenderId, cancellationToken);
+            var senderSubscription = await _cacheService.GetAsync<Subscription>(sender.SubscriptionId.ToString()) ?? throw new BadRequestException("Your subscription has expired");
+
+            var senderSentLikes = await _likeRepository.GetAllUserSentLikesAsync(sender.Id, cancellationToken);
+            var senderSentLikesTodayAmount = senderSentLikes.Where(l => l.CreatedAt.Date == DateTime.Now.Date).ToList().Count;
+
+            if (senderSubscription.SubscriptionType == SubscriptionType.Base && senderSentLikesTodayAmount >= likeAmountDayLimit)
+            {
+                throw new BadRequestException("User has used up the daily limit");
+            } 
+
             var receiver = await _userRepository.GetByIdAsync(like.ReceiverId, cancellationToken);
 
             if (sender is null || receiver is null)
@@ -45,10 +63,9 @@ namespace Tinder.BLL.Services
 
             var likeEntity = new LikeEntity()
             {
-                SenderUser = sender,
-                ReceiverUser = receiver,
                 SenderId = sender.Id,
                 ReceiverId = receiver.Id,
+                CreatedAt = DateTime.Now
             };
 
             var newLike = await _repository.CreateAsync(likeEntity, cancellationToken);
