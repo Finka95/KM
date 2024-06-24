@@ -19,6 +19,10 @@ namespace Tinder.BLL.Services
         public async Task<T> GetAsync<T>(string key)
         {
             var jsonStringValue = await _distributedCache.GetStringAsync(key, default);
+            if (jsonStringValue == null)
+            {
+                return default;
+            }
             var model = JsonSerializer.Deserialize<T>(jsonStringValue);
             return model;
         }
