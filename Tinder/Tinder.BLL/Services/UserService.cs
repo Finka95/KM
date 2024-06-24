@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Shared.Events;
 using System.Text.Json.Nodes;
+using Tinder.BLL.Exceptions;
 using Tinder.BLL.Extensions;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.MessageBroker.Interfaces;
@@ -54,6 +55,17 @@ namespace Tinder.BLL.Services
             user.SubscriptionId = subscriptionId;
             await _userRepository.UpdateAsync(user, cancellationToken);
             return _mapper.Map<User>(user);
+        }
+
+        public override async Task<User> UpdateAsync(Guid id, User model, CancellationToken cancellationToken)
+        {
+            var userFromDb = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist"); ;
+            var newEntity = _mapper.Map<UserEntity>(model);
+            newEntity.Id = id;
+            newEntity.FusionUserId = userFromDb.FusionUserId;
+            newEntity.SubscriptionId = userFromDb.SubscriptionId;
+            await _repository.UpdateAsync(newEntity, cancellationToken);
+            return _mapper.Map<User>(newEntity);
         }
     }
 }
