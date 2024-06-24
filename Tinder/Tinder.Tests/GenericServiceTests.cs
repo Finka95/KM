@@ -5,6 +5,7 @@ using Shouldly;
 using Tinder.BLL.Exceptions;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Mapper;
+using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Models;
 using Tinder.BLL.Services;
 using Tinder.DAL.Entities;
@@ -17,6 +18,7 @@ namespace Tinder.Tests
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IEventBus _eventBus;
 
         public GenericServiceTests()
         {
@@ -25,8 +27,9 @@ namespace Tinder.Tests
             {
                 cfg.AddProfile(new MappingProfile());
             }).CreateMapper();
+            _eventBus = Substitute.For<IEventBus>();
 
-            _userService = new UserService(_userRepository, _mapper);
+            _userService = new UserService(_userRepository, _mapper, _eventBus);
         }
 
         [Theory, AutoMoqData]
