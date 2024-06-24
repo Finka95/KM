@@ -11,7 +11,7 @@ namespace Tinder.API.Controllers
     [Authorize]
     [Route("api/likes")]
     [ApiController]
-    public class LikeController : Controller
+    public class LikeController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ILikeService _likeService;

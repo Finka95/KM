@@ -59,7 +59,7 @@ namespace Tinder.BLL.Services
 
         public override async Task<User> UpdateAsync(Guid id, User model, CancellationToken cancellationToken)
         {
-            var userFromDb = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist"); ;
+            var userFromDb = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist");
             var newEntity = _mapper.Map<UserEntity>(model);
             newEntity.Id = id;
             newEntity.FusionUserId = userFromDb.FusionUserId;

@@ -8,12 +8,10 @@ namespace Tinder.BLL.Services
     public class CacheService : ICacheService
     {
         private readonly IDistributedCache _distributedCache;
-        private readonly IMapper _mapper;
 
-        public CacheService(IDistributedCache distributedCache, IMapper mapper)
+        public CacheService(IDistributedCache distributedCache)
         {
             _distributedCache = distributedCache;
-            _mapper = mapper;
         }
 
         public async Task<T> GetAsync<T>(string key)
