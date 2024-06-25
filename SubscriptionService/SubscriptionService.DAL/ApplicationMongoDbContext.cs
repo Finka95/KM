@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using SubscriptionService.DAL.Entities;
 using SubscriptionService.DAL.Interfaces;
 
 namespace SubscriptionService.DAL
@@ -15,9 +14,9 @@ namespace SubscriptionService.DAL
             _database = mongoClient.GetDatabase(options.Value.DatabaseName);
         }
 
-        public IMongoCollection<SubscriptionEntity> GetCollection()
+        public IMongoCollection<T> GetCollection<T>(string name)
         {
-            return _database.GetCollection<SubscriptionEntity>("Subscriptions");
+            return _database.GetCollection<T>(name);
         }
     }
 }

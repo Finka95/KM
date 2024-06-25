@@ -1,10 +1,9 @@
 ﻿using MongoDB.Driver;
-using SubscriptionService.DAL.Entities;
 
 namespace SubscriptionService.DAL.Interfaces
 {
     public interface IApplicationMongoDbContext
     {
-        public IMongoCollection<SubscriptionEntity> GetCollection();
+        public IMongoCollection<T> GetCollection<T>(string name);
     }
 }

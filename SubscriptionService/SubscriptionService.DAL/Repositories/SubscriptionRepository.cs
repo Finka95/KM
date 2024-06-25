@@ -10,7 +10,7 @@ namespace SubscriptionService.DAL.Repositories
 
         public SubscriptionRepository(IApplicationMongoDbContext context)
         {
-            _subscriptionCollection = context.GetCollection();
+            _subscriptionCollection = context.GetCollection<SubscriptionEntity>("Subscriptions");
         }
 
         public async Task<SubscriptionEntity> CreateAsync(SubscriptionEntity subscriptionEntity, CancellationToken cancellationToken)
