@@ -29,7 +29,7 @@ namespace SubscriptionService.BLL.Services
                 throw new BadRequestException("User already has subscription");
             }
 
-            var utcNow = _dateTimeProvider.UtcNow;
+            var utcNow = _dateTimeProvider.GetUtcNow;
             var modelToCreate = new SubscriptionEntity
             {
                 FusionUserId = fusionUserId,
@@ -49,7 +49,7 @@ namespace SubscriptionService.BLL.Services
 
             var fusionUserId = Guid.Parse(userJson["id"].ToString());
 
-            var utcNow = _dateTimeProvider.UtcNow;
+            var utcNow = _dateTimeProvider.GetUtcNow;
             var subscription = new Subscription
             {
                 FusionUserId = fusionUserId,
@@ -89,7 +89,7 @@ namespace SubscriptionService.BLL.Services
             CancellationToken cancellationToken)
         {
             var subscriptionToUpdate = await _subscriptionRepository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist");
-            var utcNow = _dateTimeProvider.UtcNow;
+            var utcNow = _dateTimeProvider.GetUtcNow;
             subscriptionToUpdate.SubscriptionType = subscriptionType;
             subscriptionToUpdate.UpdatedAt = utcNow;
             subscriptionToUpdate.ExpiresAt = utcNow.AddMonths(1);
