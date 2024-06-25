@@ -48,9 +48,9 @@ namespace SubscriptionService.DAL.Repositories
             var updateDefinition = new UpdateDefinitionBuilder<SubscriptionEntity>()
                 .Set(s => s.Id, subscriptionEntity.Id)
                 .Set(s => s.FusionUserId, subscriptionEntity.FusionUserId)
-                .Set(s => s.UpdatedAt, DateTime.Now)
+                .Set(s => s.UpdatedAt, subscriptionEntity.UpdatedAt)
                 .Set(s => s.CreatedAt, subscriptionEntity.CreatedAt)
-                .Set(s => s.ExpiresAt, DateTime.Now.AddMonths(1))
+                .Set(s => s.ExpiresAt, subscriptionEntity.ExpiresAt)
                 .Set(s => s.SubscriptionType, subscriptionEntity.SubscriptionType);
             return _subscriptionCollection.UpdateOneAsync(filter, updateDefinition, null, cancellationToken);
         }
