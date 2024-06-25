@@ -85,6 +85,8 @@ namespace SubscriptionService.BLL.Services
         {
             var subscriptionToUpdate = await _subscriptionRepository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist");
             subscriptionToUpdate.SubscriptionType = subscriptionType;
+            subscriptionToUpdate.ExpiresAt = DateTime.Now.AddMonths(1);
+            subscriptionToUpdate.UpdatedAt = DateTime.Now;
             await _subscriptionRepository.UpdateAsync(id, subscriptionToUpdate, cancellationToken);
 
             var updatedSubscription = await _subscriptionRepository.GetByIdAsync(id, cancellationToken);
