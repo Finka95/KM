@@ -2,7 +2,7 @@
 
 namespace SubscriptionService.DAL.Interfaces
 {
-    internal interface ISubscriptionRepository
+    public interface ISubscriptionRepository
     {
         public Task<List<SubscriptionEntity>> GetAllAsync(CancellationToken cancellationToken);
         public Task<SubscriptionEntity> GetByIdAsync(Guid id,
