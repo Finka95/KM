@@ -7,14 +7,13 @@ using SubscriptionService.Domain.Enums;
 using System.Text.Json.Nodes;
 using Mapster;
 using SubscriptionService.Domain.Exceptions;
-using Volo.Abp.EventBus;
 
 namespace SubscriptionService.BLL.Services
 {
     public class SubscriptionService : ISubscriptionService
     {
         private readonly ISubscriptionRepository _subscriptionRepository;
-        public SubscriptionService(ISubscriptionRepository subscriptionRepository, IEventBus eventBus)
+        public SubscriptionService(ISubscriptionRepository subscriptionRepository)
         {
             _subscriptionRepository = subscriptionRepository;
         }
@@ -88,9 +87,7 @@ namespace SubscriptionService.BLL.Services
             subscriptionToUpdate.ExpiresAt = DateTime.Now.AddMonths(1);
             subscriptionToUpdate.UpdatedAt = DateTime.Now;
             await _subscriptionRepository.UpdateAsync(id, subscriptionToUpdate, cancellationToken);
-
-            var updatedSubscription = await _subscriptionRepository.GetByIdAsync(id, cancellationToken);
-            return updatedSubscription.Adapt<Subscription>();
+            return subscriptionToUpdate.Adapt<Subscription>();
         }
     }
 }
