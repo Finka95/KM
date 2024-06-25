@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubscriptionService.DAL", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubscriptionService.Domain", "SubscriptionService.Domain\SubscriptionService.Domain.csproj", "{3A254C55-8B01-4E66-B1EC-C6F01367070E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionService.BLL", "SubscriptionService.BLL\SubscriptionService.BLL.csproj", "{2B0B29AD-4F51-4D02-B82B-A65EEFCDF073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubscriptionService.BLL", "SubscriptionService.BLL\SubscriptionService.BLL.csproj", "{2B0B29AD-4F51-4D02-B82B-A65EEFCDF073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
