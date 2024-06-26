@@ -32,6 +32,7 @@ namespace SubscriptionService.BLL.Services
             {
                 FusionUserId = fusionUserId,
                 SubscriptionType = subscription.SubscriptionType,
+                Email = subscription.Email,
                 CreatedAt = utcNow,
                 UpdatedAt = utcNow,
                 ExpiresAt = utcNow.AddMonths(1)
