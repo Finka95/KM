@@ -4,6 +4,6 @@ namespace SubscriptionService.Domain
 {
     public class DateTimeProvider : IDateTimeProvider
     {
-        public DateTime GetUtcNow => DateTime.UtcNow;
+        public DateTime UtcNow => DateTime.UtcNow;
     }
 }

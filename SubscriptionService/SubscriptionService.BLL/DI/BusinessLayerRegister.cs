@@ -6,12 +6,12 @@ using SubscriptionService.DAL.DI;
 namespace SubscriptionService.BLL.DI
 {
     public static class BusinessLayerRegister
-    {
+    {s
         public static void RegisterBusinessLogicDependencies(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.RegisterDataAccessDependencies(configuration);
             services.AddScoped<ISubscriptionService, Services.SubscriptionService>();
+            services.RegisterDataAccessDependencies(configuration);
         }
     }
 }
