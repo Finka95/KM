@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using SubscriptionService.BLL.Interfaces;
+﻿using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.DAL.Interfaces;
 using SubscriptionService.BLL.Models;
 using SubscriptionService.DAL.Entities;
 using SubscriptionService.Domain.Enums;
-using System.Text.Json.Nodes;
 using Mapster;
 using SubscriptionService.Domain.Exceptions;
 using SubscriptionService.Domain.Interfaces;
@@ -40,28 +38,6 @@ namespace SubscriptionService.BLL.Services
             };
             var entity = await _subscriptionRepository.CreateAsync(modelToCreate, cancellationToken);
             return entity.Adapt<Subscription>();
-        }
-
-        public async Task<Subscription> CreateSubscriptionAfterUserRegistration(JsonObject request, CancellationToken cancellationToken)
-        {
-            var jsonObject = JObject.Parse(request.ToJsonString());
-            var userJson = jsonObject["event"]["user"];
-
-            var fusionUserId = Guid.Parse(userJson["id"].ToString());
-
-            var utcNow = _dateTimeProvider.UtcNow;
-            var subscription = new Subscription
-            {
-                FusionUserId = fusionUserId,
-                SubscriptionType = SubscriptionType.Base,
-                CreatedAt = utcNow,
-                UpdatedAt = utcNow,
-                ExpiresAt = utcNow.AddMonths(1)
-            };
-
-            var subscriptionEntity = subscription.Adapt<SubscriptionEntity>();
-            var createdSubscription = await _subscriptionRepository.CreateAsync(subscriptionEntity, cancellationToken);
-            return createdSubscription.Adapt<Subscription>();
         }
 
         public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)

@@ -7,8 +7,6 @@ namespace SubscriptionService.BLL.Interfaces
     public interface ISubscriptionService
     {
         public Task<Subscription> CreateAsync(Guid fusionUserId, Subscription subscription, CancellationToken cancellationToken);
-        public Task<Subscription> CreateSubscriptionAfterUserRegistration(JsonObject request, CancellationToken cancellationToken);
-
         public Task<Subscription> UpdateAsync(Guid id, SubscriptionType subscriptionType,
             CancellationToken cancellationToken);
         Task<Subscription> GetByIdAsync(Guid id, CancellationToken cancellationToken);
