@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.BLL.MessageBroker;
+using SubscriptionService.BLL.MessageBroker.Interfaces;
 using SubscriptionService.DAL.DI;
 
 namespace SubscriptionService.BLL.DI
@@ -27,7 +28,7 @@ namespace SubscriptionService.BLL.DI
                 busConfiguration.UsingRabbitMq((context, cfg) =>
                 {
                     var settings = context.GetRequiredService<MessageBrokerSettings>();
-                    cfg.Host(new Uri(settings.Host), hostConfigure =>
+                    cfg.Host("localhost", hostConfigure =>
                     {
                         hostConfigure.Username(settings.Username);
                         hostConfigure.Password(settings.Password);
@@ -36,6 +37,7 @@ namespace SubscriptionService.BLL.DI
                     cfg.ConfigureEndpoints(context);
                 });
             });
+            services.AddScoped<IEventBus, EventBus>();
         }
     }
 }
