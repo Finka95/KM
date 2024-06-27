@@ -23,6 +23,9 @@ namespace SubscriptionService.BLL.MessageBroker.Consumers
             var subscriptionToCreate = context.Message.Adapt<Subscription>();
             var createdSubscription = await _subscriptionService.CreateAsync(subscriptionToCreate.FusionUserId,
                 subscriptionToCreate, default);
+
+            var subscriptionCreated = createdSubscription.Adapt<SubscriptionCreated>();
+            await _eventBus.PublishAsync(subscriptionCreated, default);
         }
     }
 }
