@@ -39,5 +39,11 @@ namespace Tinder.DAL.Repositories
                 .Include(u => u.Photos)
                 .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         }
+
+        public Task<UserEntity> GetByFusionUserId(Guid fusionUserId, CancellationToken cancellationToken)
+        {
+            return _dbSet.AsNoTracking().FirstOrDefaultAsync(u => u.FusionUserId == fusionUserId, cancellationToken);
+        }
+
     }
 }
