@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Tinder.BLL.Interfaces;
 using Tinder.BLL.Mapper;
 using Tinder.BLL.MessageBroker;
+using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Services;
 using Tinder.DAL.DI;
 
@@ -43,6 +44,7 @@ namespace Tinder.BLL.DI
                     configurator.ConfigureEndpoints(context);
                 });
             });
+            services.AddScoped<IEventBus, EventBus>();
         }
     }
 }
