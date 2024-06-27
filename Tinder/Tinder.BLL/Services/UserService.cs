@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json.Linq;
 using System.Text.Json.Nodes;
+using Shared.Events;
 using Tinder.BLL.Extensions;
 using Tinder.BLL.Interfaces;
+using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Models;
 using Tinder.DAL.Entities;
 using Tinder.DAL.Interfaces;
@@ -12,11 +14,13 @@ namespace Tinder.BLL.Services
     public class UserService : GenericService<User, UserEntity>, IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IEventBus _eventBus;
 
-        public UserService(IUserRepository repository, IMapper mapper)
+        public UserService(IUserRepository repository, IMapper mapper, IEventBus eventBus)
             : base(repository, mapper)
         {
             _userRepository = repository;
+            _eventBus = eventBus;
         }
 
         public async Task<User> CreateUserFromJson(JsonObject request, CancellationToken cancellationToken)
@@ -28,17 +32,22 @@ namespace Tinder.BLL.Services
             var firstName = userJson["firstName"].ToString();
             var lastName = userJson["lastName"].ToString();
             var birthDate = (DateTime)userJson["birthDate"];
+            var email = userJson["email"].ToString();
 
             var user = new User
             {
                 FusionUserId = fusionUserId,
                 FirstName = firstName,
                 LastName = lastName,
-                Age = birthDate.CalculateAge()
+                Age = birthDate.CalculateAge(),
+                Email = email
             };
 
             var userEntity = _mapper.Map<UserEntity>(user);
             var createdUser = await _userRepository.CreateFromJsonAsync(userEntity, cancellationToken);
+
+            var userCreatedEvent = _mapper.Map<UserCreated>(createdUser);
+            await _eventBus.PublishAsync(userCreatedEvent, cancellationToken);
             return _mapper.Map<User>(createdUser);
         }
     }
