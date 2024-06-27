@@ -28,7 +28,7 @@ namespace SubscriptionService.BLL.DI
                 busConfiguration.UsingRabbitMq((context, cfg) =>
                 {
                     var settings = context.GetRequiredService<MessageBrokerSettings>();
-                    cfg.Host("localhost", hostConfigure =>
+                    cfg.Host(new Uri(settings.Host), hostConfigure =>
                     {
                         hostConfigure.Username(settings.Username);
                         hostConfigure.Password(settings.Password);
