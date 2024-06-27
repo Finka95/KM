@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.BLL.MessageBroker;
+using SubscriptionService.BLL.MessageBroker.Consumers;
 using SubscriptionService.BLL.MessageBroker.Interfaces;
 using SubscriptionService.DAL.DI;
 
@@ -24,6 +25,8 @@ namespace SubscriptionService.BLL.DI
             services.AddMassTransit(busConfiguration =>
             {
                 busConfiguration.SetKebabCaseEndpointNameFormatter();
+
+                busConfiguration.AddConsumer<UserCreatedConsumer>();
 
                 busConfiguration.UsingRabbitMq((context, cfg) =>
                 {
