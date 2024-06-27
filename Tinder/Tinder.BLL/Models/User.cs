@@ -12,6 +12,8 @@ namespace Tinder.BLL.Models
         public string City { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public Gender Gender { get; set; }
+        public Guid SubscriptionId { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         public ICollection<Chat> Chats { get; set; }
         public ICollection<Photo> Photos { get; set; }

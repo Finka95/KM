@@ -11,6 +11,8 @@ public class UserEntity : BaseEntity
     public string City { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public Gender Gender { get; set; }
+    public Guid SubscriptionId { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     public ICollection<ChatEntity> Chats { get; set; }
     public ICollection<PhotoEntity> Photos { get; set; }

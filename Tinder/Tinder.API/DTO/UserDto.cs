@@ -11,6 +11,8 @@ namespace Tinder.API.Models
         public string City { get; set; }
         public string Description { get; set; }
         public Gender Gender { get; set; }
+        public Guid SubscriptionId { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         public ICollection<ChatDto> Chats { get; set; }
         public ICollection<PhotoDto> Photos { get; set; }
