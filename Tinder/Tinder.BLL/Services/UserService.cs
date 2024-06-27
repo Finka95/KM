@@ -50,5 +50,13 @@ namespace Tinder.BLL.Services
             await _eventBus.PublishAsync(userCreatedEvent, cancellationToken);
             return _mapper.Map<User>(createdUser);
         }
+
+        public async Task<User> SetSubscriptionIdAsync(Guid fusionUserId, Guid subscriptionId, CancellationToken cancellationToken)
+        {
+            var user = await _userRepository.GetByFusionUserId(fusionUserId, cancellationToken);
+            user.SubscriptionId = subscriptionId;
+            await _userRepository.UpdateAsync(user, cancellationToken);
+            return _mapper.Map<User>(user);
+        }
     }
 }
