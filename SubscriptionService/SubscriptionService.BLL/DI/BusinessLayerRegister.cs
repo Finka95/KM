@@ -6,6 +6,7 @@ using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.BLL.MessageBroker;
 using SubscriptionService.BLL.MessageBroker.Consumers;
 using SubscriptionService.BLL.MessageBroker.Interfaces;
+using SubscriptionService.BLL.Services;
 using SubscriptionService.DAL.DI;
 
 namespace SubscriptionService.BLL.DI
@@ -22,6 +23,7 @@ namespace SubscriptionService.BLL.DI
             services.AddSingleton(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
 
+            services.AddHostedService<CheckIsSubscriptionExpiredBackgroundService>();
             services.AddMassTransit(busConfiguration =>
             {
                 busConfiguration.SetKebabCaseEndpointNameFormatter();
