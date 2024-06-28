@@ -35,6 +35,7 @@ namespace Tinder.BLL.DI
 
                 busConfiguration.AddConsumer<SubscriptionCreatedConsumer>();
                 busConfiguration.AddConsumer<SubscriptionDeletedConsumer>();
+                busConfiguration.AddConsumer<SubscriptionUpdatedConsumer>();
 
                 busConfiguration.UsingRabbitMq((context, configurator) =>
                 {
