@@ -9,6 +9,8 @@ using Tinder.BLL.MessageBroker.Consumers;
 using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Services;
 using Tinder.DAL.DI;
+using Tinder.BLL.Providers.Interfaces;
+using Tinder.BLL.Providers;
 
 namespace Tinder.BLL.DI
 {
@@ -25,6 +27,8 @@ namespace Tinder.BLL.DI
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ICacheService, CacheService>();
+
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
 
             services.Configure<MessageBrokerSettings>(configuration.GetSection("MessageBroker"));
             services.AddSingleton(serviceProvider =>
