@@ -17,7 +17,7 @@ namespace SubscriptionService.BLL.Services
         public CheckIsSubscriptionExpired(IServiceScopeFactory serviceScopeFactory,
             IDateTimeProvider dateTimeProvider)
         {
-            _period = TimeSpan.FromMinutes(1);
+            _period = TimeSpan.FromDays(1);
             _serviceScopeFactory = serviceScopeFactory;
             _dateTimeProvider = dateTimeProvider;
         }
