@@ -8,16 +8,16 @@ using SubscriptionService.Domain.Interfaces;
 
 namespace SubscriptionService.BLL.Services
 {
-    public class CheckIsSubscriptionExpiredBackgroundService : BackgroundService
+    public class CheckIsSubscriptionExpired : BackgroundService
     {
         private readonly TimeSpan _period;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IDateTimeProvider _dateTimeProvider;
 
-        public CheckIsSubscriptionExpiredBackgroundService(IServiceScopeFactory serviceScopeFactory,
+        public CheckIsSubscriptionExpired(IServiceScopeFactory serviceScopeFactory,
             IDateTimeProvider dateTimeProvider)
         {
-            _period = TimeSpan.FromDays(1);
+            _period = TimeSpan.FromMinutes(1);
             _serviceScopeFactory = serviceScopeFactory;
             _dateTimeProvider = dateTimeProvider;
         }
