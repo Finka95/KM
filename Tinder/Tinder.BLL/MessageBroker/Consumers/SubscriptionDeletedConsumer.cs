@@ -7,15 +7,19 @@ namespace Tinder.BLL.MessageBroker.Consumers
     public class SubscriptionDeletedConsumer : IConsumer<SubscriptionDeleted>
     {
         private readonly IUserService _userService;
+        private readonly ICacheService _cacheService;
 
-        public SubscriptionDeletedConsumer(IUserService userService)
+        public SubscriptionDeletedConsumer(IUserService userService,
+            ICacheService cacheService)
         {
             _userService = userService;
+            _cacheService = cacheService;
         }
 
-        public Task Consume(ConsumeContext<SubscriptionDeleted> context)
+        public async Task Consume(ConsumeContext<SubscriptionDeleted> context)
         {
-            return _userService.SetSubscriptionIdAsync(context.Message.FusionUserId, 
+            await _cacheService.RemoveAsync(context.Message.Id.ToString(), default);
+            await _userService.SetSubscriptionIdAsync(context.Message.FusionUserId, 
                 Guid.Empty, default);
         }
     }
