@@ -4,6 +4,8 @@ using SubscriptionService.BLL.Models;
 using SubscriptionService.DAL.Entities;
 using SubscriptionService.Domain.Enums;
 using Mapster;
+using Shared.Events;
+using SubscriptionService.BLL.MessageBroker.Interfaces;
 using SubscriptionService.Domain.Exceptions;
 using SubscriptionService.Domain.Interfaces;
 
@@ -13,13 +15,17 @@ namespace SubscriptionService.BLL.Services
     {
         private readonly ISubscriptionRepository _subscriptionRepository;
         private readonly IDateTimeProvider _dateTimeProvider;
-        public SubscriptionService(ISubscriptionRepository subscriptionRepository, IDateTimeProvider dateTimeProvider)
+        private readonly IEventBus _eventBus;
+        public SubscriptionService(ISubscriptionRepository subscriptionRepository,
+            IDateTimeProvider dateTimeProvider, IEventBus eventBus)
         {
             _subscriptionRepository = subscriptionRepository;
             _dateTimeProvider = dateTimeProvider;
+            _eventBus = eventBus;
         }
 
-        public async Task<Subscription> CreateAsync(Guid fusionUserId, Subscription subscription, CancellationToken cancellationToken)
+        public async Task<Subscription> CreateAsync(Guid fusionUserId, 
+            Subscription subscription, CancellationToken cancellationToken)
         {
             var userSubscription = await _subscriptionRepository.GetByFusionUserIdAsync(fusionUserId, cancellationToken);
             if (userSubscription != null)
@@ -38,6 +44,9 @@ namespace SubscriptionService.BLL.Services
                 ExpiresAt = utcNow.AddMonths(1)
             };
             var entity = await _subscriptionRepository.CreateAsync(modelToCreate, cancellationToken);
+
+            var subscriptionCreated = entity.Adapt<SubscriptionCreated>();
+            await _eventBus.PublishAsync(subscriptionCreated, cancellationToken);
             return entity.Adapt<Subscription>();
         }
 
@@ -49,6 +58,9 @@ namespace SubscriptionService.BLL.Services
                 return;
             }
             await _subscriptionRepository.DeleteAsync(subscriptionEntity, cancellationToken);
+
+            var subscriptionDeleted = subscriptionEntity.Adapt<SubscriptionDeleted>();
+            await _eventBus.PublishAsync(subscriptionDeleted, cancellationToken);
         }
 
         public async Task<List<Subscription>> GetAllAsync(CancellationToken cancellationToken)
@@ -71,6 +83,9 @@ namespace SubscriptionService.BLL.Services
             subscriptionToUpdate.UpdatedAt = utcNow;
             subscriptionToUpdate.ExpiresAt = utcNow.AddMonths(1);
             await _subscriptionRepository.UpdateAsync(id, subscriptionToUpdate, cancellationToken);
+
+            var subscriptionUpdated = subscriptionToUpdate.Adapt<SubscriptionUpdated>();
+            await _eventBus.PublishAsync(subscriptionUpdated, cancellationToken);
             return subscriptionToUpdate.Adapt<Subscription>();
         }
     }
