@@ -24,6 +24,7 @@ namespace Tinder.BLL.DI
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<ICacheService, CacheService>();
 
             services.Configure<MessageBrokerSettings>(configuration.GetSection("MessageBroker"));
             services.AddSingleton(serviceProvider =>
