@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Shared.Events;
 using SubscriptionService.BLL.Interfaces;
 using SubscriptionService.BLL.MessageBroker.Interfaces;
+using SubscriptionService.Domain.Interfaces;
 
 namespace SubscriptionService.BLL.Services
 {
@@ -11,11 +12,14 @@ namespace SubscriptionService.BLL.Services
     {
         private readonly TimeSpan _period;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public CheckIsSubscriptionExpiredBackgroundService(IServiceScopeFactory serviceScopeFactory)
+        public CheckIsSubscriptionExpiredBackgroundService(IServiceScopeFactory serviceScopeFactory,
+            IDateTimeProvider dateTimeProvider)
         {
             _period = TimeSpan.FromDays(1);
             _serviceScopeFactory = serviceScopeFactory;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -29,7 +33,9 @@ namespace SubscriptionService.BLL.Services
 
                 foreach (var subscription in subscriptions)
                 {
-                    if (DateTime.Now.Date == subscription.ExpiresAt.Date)
+                    var utcNowDate = _dateTimeProvider.UtcNow.Date;
+
+                    if (utcNowDate == subscription.ExpiresAt.Date)
                     {
                         var subscriptionExpired = subscription.Adapt<SubscriptionExpired>();
                         var eventBus = scope.ServiceProvider.GetRequiredService<IEventBus>();
