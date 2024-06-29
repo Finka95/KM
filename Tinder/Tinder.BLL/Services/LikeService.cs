@@ -37,6 +37,13 @@ namespace Tinder.BLL.Services
             var utcNow = _dateTimeProvider.UtcNow;
 
             var sender = await _userRepository.GetByIdAsync(like.SenderId, cancellationToken);
+            var receiver = await _userRepository.GetByIdAsync(like.ReceiverId, cancellationToken);
+            
+            if (sender is null || receiver is null)
+            {
+                throw new NotFoundException("Invalid like model");
+            }
+
             var senderSubscription = await _cacheService.GetAsync<Subscription>(sender.SubscriptionId.ToString(), cancellationToken) 
                                      ?? throw new BadRequestException("Your subscription has expired");
 
@@ -46,13 +53,6 @@ namespace Tinder.BLL.Services
             if (senderSubscription.SubscriptionType == SubscriptionType.Base && senderSentLikesTodayAmount >= LikeAmountDayLimit)
             {
                 throw new BadRequestException("User has used up the daily limit");
-            }
-
-            var receiver = await _userRepository.GetByIdAsync(like.ReceiverId, cancellationToken);
-
-            if (sender is null || receiver is null)
-            {
-                throw new NotFoundException("Invalid like model");
             }
 
             if (sender.ReceivedLikes.Any(l => l.SenderId == receiver.Id))
