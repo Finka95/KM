@@ -8,6 +8,7 @@ using Tinder.BLL.MessageBroker.Interfaces;
 using Tinder.BLL.Models;
 using Tinder.DAL.Entities;
 using Tinder.DAL.Interfaces;
+using Tinder.BLL.Exceptions;
 
 namespace Tinder.BLL.Services
 {
@@ -57,6 +58,18 @@ namespace Tinder.BLL.Services
             user.SubscriptionId = subscriptionId;
             await _userRepository.UpdateAsync(user, cancellationToken);
             return _mapper.Map<User>(user);
+        }
+
+        public override async Task<User> UpdateAsync(Guid id, User model, CancellationToken cancellationToken)
+        {
+            var userFromDb = await _repository.GetByIdAsync(id, cancellationToken) ?? throw new NotFoundException("Entity with this id doesn't exist"); ;
+            var newEntity = _mapper.Map<UserEntity>(model);
+            newEntity.Id = id;
+            newEntity.FusionUserId = userFromDb.FusionUserId;
+            newEntity.SubscriptionId = userFromDb.SubscriptionId;
+            newEntity.Email = userFromDb.Email; 
+            await _repository.UpdateAsync(newEntity, cancellationToken);
+            return _mapper.Map<User>(newEntity);
         }
     }
 }
