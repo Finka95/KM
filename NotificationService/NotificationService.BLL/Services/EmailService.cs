@@ -11,9 +11,9 @@ namespace NotificationService.BLL.Services
     public class EmailService : IEmailService
     {
         private readonly EmailSettings _emailSettings;
-        private readonly ILogger _logger;
+        private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IOptions<EmailSettings> options, ILogger logger)
+        public EmailService(IOptions<EmailSettings> options, ILogger<EmailService> logger)
         {
             _logger = logger;
             _emailSettings = options.Value;
