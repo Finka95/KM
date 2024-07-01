@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NotificationService.BLL.MessageBroker;
 using NotificationService.BLL.MessageBroker.Interfaces;
+using NotificationService.BLL.Models;
 
 namespace NotificationService.BLL.DI
 {
@@ -15,6 +16,8 @@ namespace NotificationService.BLL.DI
             services.Configure<MessageBrokerSettings>(configuration.GetSection("MessageBroker"));
             services.AddSingleton(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
+            services.Configure<EmailSettings>(configuration.GetSection("Email"));
+
             services.AddMassTransit(busConfiguration =>
             {
                 busConfiguration.SetKebabCaseEndpointNameFormatter();
