@@ -25,6 +25,8 @@ namespace NotificationService.BLL.DI
             {
                 busConfiguration.SetKebabCaseEndpointNameFormatter();
 
+                busConfiguration.AddConsumer<SubscriptionExpiredNotification>();
+
                 busConfiguration.UsingRabbitMq((context, cfg) =>
                 {
                     var settings = context.GetRequiredService<MessageBrokerSettings>();
