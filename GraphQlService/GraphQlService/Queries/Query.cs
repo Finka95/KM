@@ -13,7 +13,8 @@ namespace GraphQlService.Queries
             _subscriptionService = subscriptionService;
             _userService = userService;
         }
-
+        
+        [UseOffsetPaging(IncludeTotalCount = true, DefaultPageSize = 3)]
         public async Task<List<UserViewModel>> GetUsersAsync()
         {
             var users = await _userService.GetUsersAsync();
