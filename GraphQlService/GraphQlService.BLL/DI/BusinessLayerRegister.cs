@@ -9,12 +9,20 @@ namespace GraphQlService.BLL.DI
     {
         public static void RegisterBusinessLogicDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+
+            services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddHttpClient("Tinder", (_, httpClient) =>
             {
                 var tinderUrl = configuration["Tinder:Url"];
                 httpClient.BaseAddress = new Uri(tinderUrl);
+            });
+
+            services.AddHttpClient("Subscriptions", (_, httpClient) =>
+            {
+                var subscriptionsUrl = configuration["Subscriptions:Url"];
+                httpClient.BaseAddress = new Uri(subscriptionsUrl);
             });
         }
     }
