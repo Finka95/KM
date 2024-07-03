@@ -16,6 +16,7 @@ namespace GraphQlService.Queries
         
         [UseOffsetPaging(IncludeTotalCount = true, DefaultPageSize = 3)]
         [UseFiltering]
+        [UseSorting]
         public async Task<List<UserViewModel>> GetUsersAsync()
         {
             var users = await _userService.GetUsersAsync();

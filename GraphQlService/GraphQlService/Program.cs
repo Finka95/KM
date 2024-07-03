@@ -8,7 +8,8 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
-    .AddFiltering();
+    .AddFiltering()
+    .AddSorting();
 
 builder.Services.AddHttpClient();
 
