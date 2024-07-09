@@ -293,3 +293,6 @@ logs
 
 #env
 .env
+
+#sqlcontainer
+sqlserver
