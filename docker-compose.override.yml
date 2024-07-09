@@ -1,0 +1,245 @@
+version: "3.4"
+
+services:
+  fusionauth:
+    depends_on:
+      db:
+        condition: service_healthy
+      search:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/fusionauth
+      DATABASE_ROOT_USERNAME: ${POSTGRES_USER}
+      DATABASE_ROOT_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      FUSIONAUTH_APP_MEMORY: ${FUSIONAUTH_APP_MEMORY}
+      FUSIONAUTH_APP_RUNTIME_MODE: ${FUSIONAUTH_APP_RUNTIME_MODE}
+      FUSIONAUTH_APP_URL: http://fusionauth:9011
+      SEARCH_SERVERS: http://search:9200
+      SEARCH_TYPE: elasticsearch
+    networks:
+      - db_net
+      - search_net
+    restart: unless-stopped
+    ports:
+      - 9011:9011
+    volumes:
+      - fusionauth_config:/usr/local/fusionauth/config
+
+  search:
+    image: opensearchproject/opensearch:2.11.0
+    environment:
+      cluster.name: fusionauth
+      discovery.type: single-node
+      node.name: search
+      plugins.security.disabled: true
+      bootstrap.memory_lock: true
+      OPENSEARCH_JAVA_OPTS: ${OPENSEARCH_JAVA_OPTS}
+    healthcheck:
+      interval: 10s
+      retries: 80
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:9200/
+    restart: unless-stopped
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 9200:9200 # REST API
+      - 9600:9600 # Performance Analyzer
+    volumes:
+      - search_data:/usr/share/opensearch/data
+    networks:
+      - search_net
+
+  db:
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - db_net
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    networks:
+      - redis_net
+
+  rabbitmq:
+    restart: always
+    hostname: rabbit
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672" # Rabbitmq instance
+      - "15672:15672" # Web interface
+    networks:
+      - rabbitmq_go_net
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  tinder.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5001
+      - ConnectionStrings__DefaultConnection=Server=tinder.mssqldb;Database=Tinder;User ID=sa;Password=Pass@word;TrustServerCertificate=True
+      - ConnectionStrings__Redis=redis:6379
+      - MessageBroker__Host=amqp://rabbitmq:5672
+      - MessageBroker__Username=user
+      - MessageBroker__Password=password
+    ports:
+      - "5001:5001"
+    restart: always
+    depends_on:
+      redis:
+        condition: service_healthy
+      tinder.mssqldb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - my-network
+      - rabbitmq_go_net
+      - graphql-net
+      - redis_net
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  tinder.mssqldb:
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=Pass@word
+    networks:
+      - my-network
+    volumes:
+      - ./sqlserver/data:/var/opt/mssql/data
+      - ./sqlserver/data:/var/opt/mssql/log
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "Pass@word" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  subscription.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5002
+      - MongoDB__ConnectionString=mongodb://root:rootpassword@subscription.service.mongodb:27017
+      - MongoDB__DatabaseName=Subscriptions
+      - MessageBroker__Host=amqp://rabbitmq:5672
+      - MessageBroker__Username=user
+      - MessageBroker__Password=password
+    ports:
+      - "5002:5002"
+    depends_on:
+      mongodb_container:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq_go_net
+      - graphql-net
+      - mongo_net
+
+  mongodb_container:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - mongo_net
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: always
+
+  notification.service:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5003
+      - MessageBroker__Host=amqp://rabbitmq:5672
+      - MessageBroker__Username=user
+      - MessageBroker__Password=password
+    ports:
+      - "5003:5003"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - rabbitmq_go_net
+      - mongo_net
+
+  graphql:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5004
+      - Tinder__Url=http://host.docker.internal:5001/api/users
+      - Subscriptions__Url=http://host.docker.internal:5002/api/subscriptions
+    depends_on:
+      tinder.api:
+        condition: service_started
+      subscription.service:
+        condition: service_started
+    ports:
+      - "5004:5004"
+    networks:
+      - graphql-net
+
+networks:
+  db_net:
+    driver: bridge
+  search_net:
+    driver: bridge
+  rabbitmq_go_net:
+    driver: bridge
+  my-network:
+    driver: bridge
+  graphql-net:
+    driver: bridge
+  mongo_net:
+    driver: bridge
+  redis_net:
+    driver: bridge
+
+volumes:
+  db_data:
+  fusionauth_config:
+  search_data:
+  mongodb_data_container:
+  rabbitmq_data:
