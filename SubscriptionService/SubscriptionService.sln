@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubscriptionService.Domain"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubscriptionService.BLL", "SubscriptionService.BLL\SubscriptionService.BLL.csproj", "{2B0B29AD-4F51-4D02-B82B-A65EEFCDF073}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "..\Shared\Shared\Shared.csproj", "{ABA212D8-F109-4B10-A459-5E12E9BB840D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{2B0B29AD-4F51-4D02-B82B-A65EEFCDF073}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B0B29AD-4F51-4D02-B82B-A65EEFCDF073}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B0B29AD-4F51-4D02-B82B-A65EEFCDF073}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABA212D8-F109-4B10-A459-5E12E9BB840D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABA212D8-F109-4B10-A459-5E12E9BB840D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABA212D8-F109-4B10-A459-5E12E9BB840D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABA212D8-F109-4B10-A459-5E12E9BB840D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
