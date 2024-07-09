@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.API", "NotificationService.API\NotificationService.API.csproj", "{B08F01F7-26D6-4DA4-862A-B5B67A04A821}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService.API", "NotificationService.API\NotificationService.API.csproj", "{B08F01F7-26D6-4DA4-862A-B5B67A04A821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.BLL", "NotificationService.BLL\NotificationService.BLL.csproj", "{DD22E83F-CA53-4D62-BC27-55B9339605E6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "..\Shared\Shared\Shared.csproj", "{BB36B133-EEB5-4BA9-AB8C-BEE93766BD58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService.BLL", "NotificationService.BLL\NotificationService.BLL.csproj", "{DD22E83F-CA53-4D62-BC27-55B9339605E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{DD22E83F-CA53-4D62-BC27-55B9339605E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD22E83F-CA53-4D62-BC27-55B9339605E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD22E83F-CA53-4D62-BC27-55B9339605E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB36B133-EEB5-4BA9-AB8C-BEE93766BD58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB36B133-EEB5-4BA9-AB8C-BEE93766BD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB36B133-EEB5-4BA9-AB8C-BEE93766BD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB36B133-EEB5-4BA9-AB8C-BEE93766BD58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

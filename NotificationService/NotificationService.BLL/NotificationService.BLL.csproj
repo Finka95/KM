@@ -11,10 +11,7 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Shared\Shared.csproj" />
+    <PackageReference Include="Tinder.Events.Mmishaaa" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
