@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using GraphQlService.BLL.Constants;
 using GraphQlService.BLL.Interfaces;
 using GraphQlService.BLL.Models;
 
@@ -10,7 +11,7 @@ namespace GraphQlService.BLL.Services
 
         public SubscriptionService(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("Subscriptions");
+            _httpClient = factory.CreateClient(HttpClientConstants.Subscriptions);
         }
 
         public async Task<List<Subscription>> GetSubscriptionsAsync()

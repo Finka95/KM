@@ -1,6 +1,7 @@
 ﻿using GraphQlService.BLL.Interfaces;
 using GraphQlService.BLL.Models;
 using System.Net.Http.Json;
+using GraphQlService.BLL.Constants;
 
 namespace GraphQlService.BLL.Services
 {
@@ -10,7 +11,7 @@ namespace GraphQlService.BLL.Services
 
         public UserService(IHttpClientFactory factory)
         {
-            _httpClient = factory.CreateClient("Tinder");
+            _httpClient = factory.CreateClient(HttpClientConstants.Tinder);
         }
 
         public async Task<List<User>> GetUsersAsync()

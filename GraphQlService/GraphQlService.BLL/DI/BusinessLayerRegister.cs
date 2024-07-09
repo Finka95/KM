@@ -1,4 +1,5 @@
-﻿using GraphQlService.BLL.Interfaces;
+﻿using GraphQlService.BLL.Constants;
+using GraphQlService.BLL.Interfaces;
 using GraphQlService.BLL.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,13 +14,13 @@ namespace GraphQlService.BLL.DI
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddHttpClient("Tinder", (_, httpClient) =>
+            services.AddHttpClient(HttpClientConstants.Tinder, (_, httpClient) =>
             {
                 var tinderUrl = configuration["Tinder:Url"];
                 httpClient.BaseAddress = new Uri(tinderUrl);
             });
 
-            services.AddHttpClient("Subscriptions", (_, httpClient) =>
+            services.AddHttpClient(HttpClientConstants.Subscriptions, (_, httpClient) =>
             {
                 var subscriptionsUrl = configuration["Subscriptions:Url"];
                 httpClient.BaseAddress = new Uri(subscriptionsUrl);
