@@ -88,8 +88,8 @@ services:
     restart: always
     hostname: rabbit
     environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=password
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
       - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 2147483648
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
@@ -107,14 +107,14 @@ services:
   tinder.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5001
-      - ConnectionStrings__DefaultConnection=Server=tinder.mssqldb;Database=Tinder;User ID=sa;Password=Pass@word;TrustServerCertificate=True
+      - ASPNETCORE_HTTP_PORTS=${TINDER_API_HTTP_PORT}
+      - ConnectionStrings__DefaultConnection=Server=tinder.mssqldb;Database=Tinder;User ID=sa;Password=${MSSQL_DB_PASSWORD};TrustServerCertificate=True
       - ConnectionStrings__Redis=redis:6379
-      - MessageBroker__Host=amqp://rabbitmq:5672
-      - MessageBroker__Username=user
-      - MessageBroker__Password=password
+      - MessageBroker__Host=${RABBITMQ_HOST}
+      - MessageBroker__Username=${RABBITMQ_USER}
+      - MessageBroker__Password=${RABBITMQ_PASSWORD}
     ports:
-      - "5001:5001"
+      - "${TINDER_API_HTTP_PORT}:${TINDER_API_HTTP_PORT}"
     restart: always
     depends_on:
       redis:
@@ -137,7 +137,7 @@ services:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=y
-      - SA_PASSWORD=Pass@word
+      - SA_PASSWORD=${MSSQL_DB_PASSWORD}
     networks:
       - my-network
     volumes:
@@ -153,14 +153,14 @@ services:
   subscription.service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5002
-      - MongoDB__ConnectionString=mongodb://root:rootpassword@subscription.service.mongodb:27017
-      - MongoDB__DatabaseName=Subscriptions
-      - MessageBroker__Host=amqp://rabbitmq:5672
-      - MessageBroker__Username=user
-      - MessageBroker__Password=password
+      - ASPNETCORE_HTTP_PORTS=${SUBSCRIPTION_SERVICE_PORT}
+      - MongoDB__ConnectionString=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@subscription.service.mongodb:27017
+      - MongoDB__DatabaseName=${MONGO_DATABASENAME}
+      - MessageBroker__Host=${RABBITMQ_HOST}
+      - MessageBroker__Username=${RABBITMQ_USER}
+      - MessageBroker__Password=${RABBITMQ_PASSWORD}
     ports:
-      - "5002:5002"
+      - "${SUBSCRIPTION_SERVICE_PORT}:${SUBSCRIPTION_SERVICE_PORT}"
     depends_on:
       mongodb_container:
         condition: service_healthy
@@ -173,8 +173,8 @@ services:
 
   mongodb_container:
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
     ports:
       - 27017:27017
     volumes:
@@ -192,12 +192,12 @@ services:
   notification.service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5003
-      - MessageBroker__Host=amqp://rabbitmq:5672
-      - MessageBroker__Username=user
-      - MessageBroker__Password=password
+      - ASPNETCORE_HTTP_PORTS=${NOTIFICATION_SERVICE_PORT}
+      - MessageBroker__Host=${RABBITMQ_HOST}
+      - MessageBroker__Username=${RABBITMQ_USER}
+      - MessageBroker__Password=${RABBITMQ_PASSWORD}
     ports:
-      - "5003:5003"
+      - "${NOTIFICATION_SERVICE_PORT}:${NOTIFICATION_SERVICE_PORT}"
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -208,16 +208,16 @@ services:
   graphql:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=5004
-      - Tinder__Url=http://host.docker.internal:5001/api/users
-      - Subscriptions__Url=http://host.docker.internal:5002/api/subscriptions
+      - ASPNETCORE_HTTP_PORTS=${GRAPHQL_SERVICE_PORT}
+      - Tinder__Url=${TINDER_URL}
+      - Subscriptions__Url=${SUBSCRIPTIONS_URL}
     depends_on:
       tinder.api:
         condition: service_started
       subscription.service:
         condition: service_started
     ports:
-      - "5004:5004"
+      - "${GRAPHQL_SERVICE_PORT}:${GRAPHQL_SERVICE_PORT}"
     networks:
       - graphql-net
 
