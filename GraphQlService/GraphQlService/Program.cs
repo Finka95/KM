@@ -2,6 +2,7 @@ using GraphQlService.BLL.DI;
 using GraphQlService.Queries;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using GraphQlService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddAuthentication()
         options.TokenValidationParameters.ValidateAudience = false;
     });
 
+builder.Services.AddHttpResponseFormatter<CustomHttpResponseFormatter>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services
@@ -37,7 +39,6 @@ builder.Services.AddHttpClient();
 builder.Services.RegisterBusinessLogicDependencies(builder.Configuration);
 
 var app = builder.Build();
-
 
 app.UseAuthentication();
 app.UseAuthorization();
