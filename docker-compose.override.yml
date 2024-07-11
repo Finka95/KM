@@ -113,6 +113,7 @@ services:
       - MessageBroker__Host=${RABBITMQ_HOST}
       - MessageBroker__Username=${RABBITMQ_USER}
       - MessageBroker__Password=${RABBITMQ_PASSWORD}
+      - Authentication__Schemes__Bearer__Authority=${ASPNETCORE_AUTHENTICATION_SETTINGS}
     ports:
       - "${TINDER_API_HTTP_PORT}:${TINDER_API_HTTP_PORT}"
     restart: always
@@ -211,6 +212,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=${GRAPHQL_SERVICE_PORT}
       - Tinder__Url=${TINDER_URL}
       - Subscriptions__Url=${SUBSCRIPTIONS_URL}
+      - Authentication__Schemes__Bearer__Authority=${ASPNETCORE_AUTHENTICATION_SETTINGS}
     depends_on:
       tinder.api:
         condition: service_started
