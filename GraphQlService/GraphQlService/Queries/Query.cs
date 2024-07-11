@@ -48,7 +48,7 @@ namespace GraphQlService.Queries
         public async Task<UserViewModel> GetUserByIdAsync(Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
-            var subscription= await _subscriptionService.GetSubscriptionByIdAsync(user.SubscriptionId);
+            var subscription = await _subscriptionService.GetSubscriptionByIdAsync(user.SubscriptionId);
 
             return new UserViewModel
             {
