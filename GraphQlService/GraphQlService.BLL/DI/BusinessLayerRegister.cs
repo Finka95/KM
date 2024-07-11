@@ -14,6 +14,8 @@ namespace GraphQlService.BLL.DI
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IUserService, UserService>();
 
+            services.AddHttpContextAccessor();
+
             services.AddHttpClient(HttpClientConstants.Tinder, (_, httpClient) =>
             {
                 var tinderUrl = configuration["Tinder:Url"];

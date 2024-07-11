@@ -1,8 +1,10 @@
 ﻿using GraphQlService.BLL.Interfaces;
 using GraphQlService.ViewModels;
+using HotChocolate.Authorization;
 
 namespace GraphQlService.Queries
 {
+    [Authorize]
     public class Query
     {
         private readonly ISubscriptionService _subscriptionService;
