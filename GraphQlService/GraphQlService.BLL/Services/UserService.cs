@@ -1,7 +1,9 @@
-﻿using GraphQlService.BLL.Interfaces;
+﻿using System.Net;
+using GraphQlService.BLL.Interfaces;
 using GraphQlService.BLL.Models;
 using System.Net.Http.Json;
 using GraphQlService.BLL.Constants;
+using GraphQlService.BLL.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace GraphQlService.BLL.Services
@@ -32,6 +34,10 @@ namespace GraphQlService.BLL.Services
             SetBearerToken();
 
             var response = await _httpClient.GetAsync($"{_httpClient.BaseAddress}/{id}");
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                throw new NotFoundException("not found");
+            }
             var result = await response.Content.ReadFromJsonAsync<User>();
             return result;
         }

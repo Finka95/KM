@@ -3,6 +3,7 @@ using GraphQlService.Queries;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using GraphQlService;
+using GraphQlService.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
+    .AddErrorFilter<ErrorFilter>()
     .AddQueryType<Query>()
     .AddFiltering()
     .AddSorting();
