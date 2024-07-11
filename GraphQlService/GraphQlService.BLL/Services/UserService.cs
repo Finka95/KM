@@ -45,13 +45,9 @@ namespace GraphQlService.BLL.Services
         private void SetBearerToken()
         {
             var bearerToken = _httpContextAccessor
-                .HttpContext
-                .Request
-                .Headers
-                .Authorization
-                .FirstOrDefault()?
-                .Split(" ")
-                .Last();
+                .HttpContext.Request
+                .Headers.Authorization
+                .FirstOrDefault()?.Split(" ").Last();
 
             _httpClient.DefaultRequestHeaders.Authorization = new System
                 .Net.Http.Headers
