@@ -43,6 +43,13 @@ namespace Tinder.BLL.Services
             return _mapper.Map<Photo>(photoEntity);
         }
 
+        public async Task<List<Photo>> GetUserAllPhotosAsync(Guid userId, CancellationToken cancellationToken)
+        {
+            var photoEntity = await _photoRepository.GetUserAllPhotosAsync(userId, cancellationToken) ?? throw new NotFoundException(" Photo is not found");
+            return _mapper.Map<List<Photo>>(photoEntity);
+        }
+
+
         public async Task<Photo> DeleteAsync(Guid userId, Guid id, CancellationToken cancellationToken)
         {
             var entity = await _photoRepository.GetByIdAsync(id, userId, cancellationToken) ?? throw new NotFoundException("Photo is not found");

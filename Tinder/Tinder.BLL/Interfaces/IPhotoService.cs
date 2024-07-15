@@ -8,5 +8,6 @@ namespace Tinder.BLL.Interfaces
         Task<Photo> GetByIdAsync(Guid userId, Guid id, CancellationToken cancellationToken);
         Task<Photo> DeleteAsync(Guid userId, Guid id, CancellationToken cancellationToken);
         Task<Photo> UpdateAvatarAsync(Guid userId, Guid id, CancellationToken cancellationToken);
+        Task<List<Photo>> GetUserAllPhotosAsync(Guid userId, CancellationToken cancellationToken);
     }
 }
