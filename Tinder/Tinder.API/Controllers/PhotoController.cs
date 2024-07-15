@@ -22,21 +22,21 @@ namespace Tinder.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("/{userId}/photos/{id}")]
+        [HttpGet("{userId}/photos/{id}")]
         public async Task<PhotoDto> GetByIdAsync(Guid userId, Guid id, CancellationToken cancellationToken)
         {
             var model = await _photoService.GetByIdAsync(userId, id, cancellationToken);
             return _mapper.Map<PhotoDto>(model);
         }
 
-        [HttpGet("/{userId}/photos")]
-        public async Task<List<PhotoDto>> GetAll(CancellationToken cancellationToken)
+        [HttpGet("{userId}/photos")]
+        public async Task<List<PhotoDto>> GetUserAllPhotosAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var photoModels = await _photoService.GetAllAsync(cancellationToken);
+            var photoModels = await _photoService.GetUserAllPhotosAsync(userId, cancellationToken);
             return _mapper.Map<List<PhotoDto>>(photoModels.ToList());
         }
 
-        [HttpPost("/{userId}/photos")]
+        [HttpPost("{userId}/photos")]
         public async Task<PhotoDto> Create(Guid userId, CreatePhotoDto dto, CancellationToken cancellationToken)
         {
             var photoToCreate = _mapper.Map<Photo>(dto);
@@ -44,14 +44,14 @@ namespace Tinder.API.Controllers
             return _mapper.Map<PhotoDto>(model);
         }
 
-        [HttpDelete("/{userId}/photos/{id}")]
+        [HttpDelete("{userId}/photos/{id}")]
         public async Task<PhotoDto> Delete(Guid userId, Guid id, CancellationToken cancellationToken)
         {
             var model = await _photoService.DeleteAsync(userId, id, cancellationToken);
             return _mapper.Map<PhotoDto>(model);
         }
 
-        [HttpPut("/{userId}/photos/{id}")]
+        [HttpPut("{userId}/photos/{id}")]
         public async Task<PhotoDto> UpdateAvatar(Guid userId, Guid id, CancellationToken cancellationToken)
         {
             var model = await _photoService.UpdateAvatarAsync(userId, id, cancellationToken);
