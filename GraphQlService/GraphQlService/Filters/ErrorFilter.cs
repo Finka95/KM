@@ -1,4 +1,5 @@
 ﻿using GraphQlService.BLL.Exceptions;
+using GraphQlService.Constants;
 
 namespace GraphQlService.Filters
 {
@@ -8,7 +9,7 @@ namespace GraphQlService.Filters
         {
             if (error.Exception is NotFoundException)
             {
-                return error.WithCode("NOT_FOUND");
+                return error.WithCode(ErrorCodesConstants.NotFound);
             }
             return error;
         }
