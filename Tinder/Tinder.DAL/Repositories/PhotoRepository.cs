@@ -26,10 +26,14 @@ namespace Tinder.DAL.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId, cancellationToken);
         }
 
-        public override Task<List<PhotoEntity>> GetAllAsync(CancellationToken cancellationToken)
+        public Task<List<PhotoEntity>> GetUserAllPhotosAsync(Guid userId, CancellationToken cancellationToken)
         {
-            return _dbSet.AsNoTracking().Include(p => p.User).ToListAsync(cancellationToken);
+            return _dbSet.AsNoTracking()
+                .Where(p => p.UserId == userId)
+                .Include(p => p.User)
+                .ToListAsync(cancellationToken);
         }
+
         public async Task<PhotoEntity> DeleteAsync(PhotoEntity photo, CancellationToken cancellationToken)
         {
             _dbSet.Remove(photo);
