@@ -7,6 +7,17 @@ using GraphQlService.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Host.UseSerilog((context, loggerConfiguration) => 
     loggerConfiguration.ReadFrom.Configuration(context.Configuration));
 
@@ -54,5 +65,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapGraphQL();
-
+app.UseCors();
 app.Run();
