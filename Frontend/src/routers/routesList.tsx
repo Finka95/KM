@@ -13,7 +13,7 @@ interface RouterType {
 
 export const privateRoutes: RouterType[] = [
   { title: "Likes", path: '/likes', element: <LikesPage /> },
-  { title: "Chats", path: 'chats', element: <ChatsPage /> },
+  { title: "Chats", path: '/chats', element: <ChatsPage /> },
   { title: "Home", path: '/near', element: <NearPage /> },
   { title: "HitOrMiss", path: "/", element: <HitOrMissPage /> },
   { title: "Profile", path: "/profile", element: <ProfilePage /> },
