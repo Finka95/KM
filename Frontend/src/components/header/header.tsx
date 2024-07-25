@@ -1,6 +1,5 @@
 import { AppBar, Box, Container, IconButton, Toolbar, Typography } from "@mui/material";
 import { FC, ReactElement } from "react";
-
 interface HeaderProps {
   title: string,
   icons?: ReactElement[]
@@ -12,7 +11,7 @@ const Header: FC<HeaderProps> = ({ title, icons }) => {
       position="sticky"
       sx={{
         backgroundColor: "#FFFFFF",
-        top: "0"
+        top: "0",
       }}>
       <Container>
       <Toolbar
@@ -31,7 +30,7 @@ const Header: FC<HeaderProps> = ({ title, icons }) => {
           </Typography>
           <Box>
             {icons?.map((icon, index) => {
-              return <IconButton key={index}>{icon}</IconButton>
+              return <IconButton key={index} sx={{color: "#000000"}}>{icon}</IconButton>
             })}
           </Box>
         </Toolbar>
