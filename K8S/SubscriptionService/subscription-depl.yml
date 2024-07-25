@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscription-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subscriptionservice
+  template:
+    metadata:
+      labels:
+        app: subscriptionservice
+    spec:
+      containers:
+        - name: subscriptionservice
+          image: mmishaaa/subscriptionservice:latest
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "5002"
+            - name: MongoDB__ConnectionString
+              value: mongodb://root:rootpassword@mongo-clusterip-srv:27017
+            - name: MongoDB__DatabaseName
+              value: Subscriptions
+            - name: MessageBroker__Host
+              value: amqp://rabbitmq-clusterip-srv:5672
+            - name: MessageBroker__Username
+              value: user
+            - name: MessageBroker__Password
+              value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: subscription-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: subscriptionservice
+  ports:
+    - name: subscriptionservice
+      protocol: TCP
+      port: 5002
+      targetPort: 5002

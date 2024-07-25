@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graphqlservice
+  template:
+    metadata:
+      labels:
+        app: graphqlservice
+    spec:
+      containers:
+        - name: graphqlservice
+          image: mmishaaa/graphqlservice:latest
+          env:
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "5004"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+            - name: Tinder__Url
+              value: "http://tinder-clusterip-srv:5001/api/users"
+            - name: Subscriptions__Url
+              value: "http://subscription-clusterip-srv:5002/api/subscriptions"
+            - name: Authentication__Schemes__Bearer__Authority
+              value: http://my-release-fusionauth:9011
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graphql-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: graphqlservice
+  ports:
+    - name: graphqlservice
+      protocol: TCP
+      port: 5004
+      targetPort: 5004
