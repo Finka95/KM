@@ -30,7 +30,7 @@ const Header: FC<HeaderProps> = ({ title, icons }) => {
           </Typography>
           <Box>
             {icons?.map((icon, index) => {
-              return <IconButton key={index} sx={{color: "#000000"}}>{icon}</IconButton>
+              return <IconButton key={index} >{icon}</IconButton>
             })}
           </Box>
         </Toolbar>
