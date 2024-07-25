@@ -1,11 +1,11 @@
 import { FC } from "react"
 import { AppBar, Toolbar, Container} from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import NearMeIcon from '@mui/icons-material/NearMe';
-import ChatIcon from '@mui/icons-material/Chat';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import NavbarItem from "../navbarItem/navbarItem";
-import StyleIcon from '@mui/icons-material/Style';
+import NavigationOutlinedIcon from '@mui/icons-material/NavigationOutlined';
+import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 
 const Footer: FC = () => {
   return (
@@ -21,11 +21,11 @@ const Footer: FC = () => {
             justifyContent: 'space-between',
             padding: "0"
           }}>
-          <NavbarItem to="/near" text="Near" icon={<NearMeIcon />} ></NavbarItem>
-          <NavbarItem to="/" text="Hit or miss" icon={<StyleIcon />} ></NavbarItem>
-          <NavbarItem to="/likes" text="Likes" icon={<FavoriteIcon />} ></NavbarItem>
-          <NavbarItem to="/chats" text="Chats" icon={<ChatIcon />} ></NavbarItem>
-          <NavbarItem to="/profile" text="Profile" icon={<AccountBoxIcon />} ></NavbarItem>
+          <NavbarItem to="/near" text="Near" icon={<NavigationOutlinedIcon />} ></NavbarItem>
+          <NavbarItem to="/" text="Hit or miss" icon={<StyleOutlinedIcon />} ></NavbarItem>
+          <NavbarItem to="/likes" text="Likes" icon={<FavoriteBorderOutlinedIcon />} ></NavbarItem>
+          <NavbarItem to="/chats" text="Chats" icon={<ChatOutlinedIcon />} ></NavbarItem>
+          <NavbarItem to="/profile" text="Profile" icon={<PermIdentityOutlinedIcon />} ></NavbarItem>
         </Toolbar>
       </Container>
     </AppBar>
