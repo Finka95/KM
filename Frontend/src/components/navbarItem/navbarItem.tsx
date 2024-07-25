@@ -10,7 +10,7 @@ interface ItemPros {
 
 const NavbarItem: FC<ItemPros> = ({text, icon, to}) => {
   return (
-    <IconButton component={RouterLink} to={to}>
+    <IconButton component={RouterLink} to={to} sx = {{color: "#000000"}}>
       <Box 
         sx={{
           display: 'flex',
