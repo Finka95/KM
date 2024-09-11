@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinder-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinderservice
+  template:
+    metadata:
+      labels:
+        app: tinderservice
+    spec:
+      containers:
+        - name: tinderservice
+          image: mmishaaa/tinderservice:latest
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "5001"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=mssql-clusterip-srv,1433;Database=Tinder;User ID=sa;Password=Pass@word;TrustServerCertificate=True"
+            - name: ConnectionStrings__Redis
+              value: "redis-clusterip-srv:6379"
+            - name: MessageBroker__Host
+              value: amqp://rabbitmq-clusterip-srv:5672
+            - name: MessageBroker__Username
+              value: user
+            - name: MessageBroker__Password
+              value: password
+            - name: Authentication__Schemes__Bearer__Authority
+              value: http://my-release-fusionauth:9011
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinder-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: tinderservice
+  ports:
+    - name: tinderservice
+      protocol: TCP
+      port: 5001
+      targetPort: 5001
